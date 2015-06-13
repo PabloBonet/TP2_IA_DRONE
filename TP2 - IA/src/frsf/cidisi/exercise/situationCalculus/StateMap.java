@@ -1,6 +1,9 @@
 package frsf.cidisi.exercise.situationCalculus;
 
+import frsf.cidisi.exercise.libreriaclases.Grafo;
 import frsf.cidisi.faia.state.EnvironmentState;
+
+import java.awt.Point;
 import java.util.Vector;
 
 public class StateMap extends EnvironmentState {
@@ -8,8 +11,8 @@ public class StateMap extends EnvironmentState {
 	
 	//TODO: Setup Variables
     private int energiaDrone;
-    private int[] posicionDrone;
-    //private Other mapa;
+    private Point posicionDrone;
+    private Grafo mapa;
     //private Other señales;
 	
 	
@@ -45,15 +48,15 @@ public class StateMap extends EnvironmentState {
      public void setenergiaDrone(int arg){
         energiaDrone = arg;
      }
-     public int[] getposicionDrone(){
+     public Point getposicionDrone(){
         return posicionDrone;
      }
-     public void setposicionDrone(int[] arg){
+     public void setposicionDrone(Point arg){
         posicionDrone = arg;
      }
-//     public Other getmapa(){
-//        return mapa;
-//     }
+     public Grafo getMapa(){
+        return mapa;
+     }
 //     public void setmapa(Other arg){
 //        mapa = arg;
 //     }

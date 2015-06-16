@@ -31,13 +31,13 @@ public class AgentDroneActionFactory extends ActionFactory {
    	 protected Action stringToAction(String stringAction) {
         Action actionObject = null;
         
-	if (stringAction.equals("IrNorte")) {
+	if (stringAction.equals("irNorte")) {
             actionObject = new IrNorte();
-        } else if (stringAction.equals("IrEste")) {
+        } else if (stringAction.equals("irEste")) {
             actionObject = new IrEste();
-        } else if (stringAction.equals("IrSur")) {
+        } else if (stringAction.equals("irSur")) {
             actionObject = new IrSur();
-        } else if (stringAction.equals("IrOeste")) {
+        } else if (stringAction.equals("irOeste")) {
             actionObject = new IrOeste();
 
         }

@@ -3,34 +3,34 @@
 %:- dynamic actualSituation/1,perception/5,executedAction/2,position/3,
 %food/3,enemy/3,empty/3,energy/2.
 
-:- dynamic radar/3, percepcion/7, victimario/3.  %fFALTA VER!!!!!!!!!!!!!!
+:- dynamic radar/3, percepcion/6, victimario/3, executedAction/2, actualSituation/1.  %fFALTA VER!!!!!!!!!!!!!!
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                            Reglas diagnósticas                                  %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-radar(C,I,J) :- percepcion([[C,I,J],_,_,_,_,_,_,_,_],_,_,_,_,_,S), actualSituation(S).
-radar(C,I,J) :- percepcion([_,[C,I,J],_,_,_,_,_,_,_],_,_,_,_,_,S), actualSituation(S).
-radar(C,I,J) :- percepcion([_,_,[C,I,J],_,_,_,_,_,_],_,_,_,_,_,S), actualSituation(S).
-radar(C,I,J) :- percepcion([_,_,_,[C,I,J],_,_,_,_,_],_,_,_,_,_,S), actualSituation(S).
-radar(C,I,J) :- percepcion([_,_,_,_,[C,I,J],_,_,_,_],_,_,_,_,_,S), actualSituation(S).
-radar(C,I,J) :- percepcion([_,_,_,_,_,[C,I,J],_,_,_],_,_,_,_,_,S), actualSituation(S).
-radar(C,I,J) :- percepcion([_,_,_,_,_,_,[C,I,J],_,_],_,_,_,_,_,S), actualSituation(S).
-radar(C,I,J) :- percepcion([_,_,_,_,_,_,_,[C,I,J],_],_,_,_,_,_,S), actualSituation(S).
-radar(C,I,J) :- percepcion([_,_,_,_,_,_,_,_,[C,I,J]],_,_,_,_,_,S), actualSituation(S).
+radar(C,I,J) :- percepcion([[C,I,J],_,_,_,_,_,_,_,_],_,_,_,_,_), actualSituation(S).
+radar(C,I,J) :- percepcion([_,[C,I,J],_,_,_,_,_,_,_],_,_,_,_,_), actualSituation(S).
+radar(C,I,J) :- percepcion([_,_,[C,I,J],_,_,_,_,_,_],_,_,_,_,_), actualSituation(S).
+radar(C,I,J) :- percepcion([_,_,_,[C,I,J],_,_,_,_,_],_,_,_,_,_), actualSituation(S).
+radar(C,I,J) :- percepcion([_,_,_,_,[C,I,J],_,_,_,_],_,_,_,_,_), actualSituation(S).
+radar(C,I,J) :- percepcion([_,_,_,_,_,[C,I,J],_,_,_],_,_,_,_,_), actualSituation(S).
+radar(C,I,J) :- percepcion([_,_,_,_,_,_,[C,I,J],_,_],_,_,_,_,_), actualSituation(S).
+radar(C,I,J) :- percepcion([_,_,_,_,_,_,_,[C,I,J],_],_,_,_,_,_), actualSituation(S).
+radar(C,I,J) :- percepcion([_,_,_,_,_,_,_,_,[C,I,J]],_,_,_,_,_), actualSituation(S).
 
 
-victimario(I,J,S) :- percepcion(_,[[I,J],_,_,_],_,X,Y,_,S), actualSituation(S), alNorte([I,J], [X,Y],S).
-victimario(I,J,S) :- percepcion(_,[_,[I,J],_,_],_,X,Y,_,S), actualSituation(S), alEste([I,J], [X,Y],S).
-victimario(I,J,S) :- percepcion(_,[_,_,[I,J],_],_,X,Y,_,S), actualSituation(S), alSur([I,J], [X,Y],S).
-victimario(I,J,S) :- percepcion(_,[_,_,_,[I,J]],_,X,Y,_,S), actualSituation(S), alOeste([I,J], [X,Y],S).
+victimario(I,J,S) :- percepcion(_,[[I,J],_,_,_],_,X,Y,_), actualSituation(S), alNorte([I,J], [X,Y],S).
+victimario(I,J,S) :- percepcion(_,[_,[I,J],_,_],_,X,Y,_), actualSituation(S), alEste([I,J], [X,Y],S).
+victimario(I,J,S) :- percepcion(_,[_,_,[I,J],_],_,X,Y,_), actualSituation(S), alSur([I,J], [X,Y],S).
+victimario(I,J,S) :- percepcion(_,[_,_,_,[I,J]],_,X,Y,_), actualSituation(S), alOeste([I,J], [X,Y],S).
 
 
-energia(E,S) :- percepcion(_,_,_,_,_,E,S), actualSituation(S).
+energia(E,S) :- percepcion(_,_,_,_,_,E), actualSituation(S).
 
-posicionAgente(X,Y,S) :- percepcion(_,_,_,X,Y,_,S), actualSituation(S).
+posicionAgente(X,Y,S) :- percepcion(_,_,_,X,Y,_), actualSituation(S).
 
-victimarioEncontrado(ID,S) :- percepcion(_,_,ID,_,_,_,S), ID > 0, actualSituation(S).
+victimarioEncontrado(ID,S) :- percepcion(_,_,ID,_,_,_), ID > 0, actualSituation(S).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                             Reglas causales                                     %
@@ -56,8 +56,8 @@ est(S1) :- S1 > 0,S is S1-1, executedAction(irSur,S), agenteEnPosicion(X,Y,S), a
 est(S1) :- S1 > 0,S is S1-1, executedAction(irOeste,S), agenteEnPosicion(X,Y,S), adyacenteAlOeste(Xo,Yo,S), not(visitada(Xo,Yo,S1)),asserta(visitada(Xo,Yo,S1)).
 est(S1) :- S1 > 0,S is S1-1,visitada(X,Y,S),not(visitada(X,Y,S1)),asserta(visitada(X,Y,S1)).
 % Decrementar energía
-est(S1) :- S1 > 0,S is S1-1, movementAction(S), agenteEnPosicion(X,Y,S), not(radar(_,X,Y)), energiaAgente(E,S), E>0, asserta(energiaAgente(E-2,S1),).
-est(S1) :- S1 > 0,S is S1-1, movementAction(S), agenteEnPosicion(X,Y,S), radar(_,X,Y), energiaAgente(E,S), E>0, asserta(energiaAgente(E-1,S1),).
+est(S1) :- S1 > 0,S is S1-1, movementAction(S), agenteEnPosicion(X,Y,S), not(radar(_,X,Y)), energiaAgente(E,S), E>0, asserta(energiaAgente(E-2,S1)).
+est(S1) :- S1 > 0,S is S1-1, movementAction(S), agenteEnPosicion(X,Y,S), radar(_,X,Y), energiaAgente(E,S), E>0, asserta(energiaAgente(E-1,S1)).
 
 % Cuando la acción ejecutada cambia la posición actual
 est(S1) :- S1 > 0,S is S1-1, executedAction(irNorte,S), agenteEnPosicion(X,Y,S), adyacenteAlNorte(Xn,Yn,S), energiaAgente(E,S), E > 0,asserta(agenteEnPosicion(Xn,Yn,S1)).
@@ -82,10 +82,10 @@ muyBueno(irSur,S) :- agenteEnPosicion(X,Y,S), alSur([I,J],[X,Y],S), radar(_,I,J)
 muyBueno(irOeste,S) :- agenteEnPosicion(X,Y,S), alOeste([I,J],[X,Y],S), radar(_,I,J), adyacenteAlOeste(Xo,Yo,S).
 
 % Es bueno ir hacia el norte, este, sur u oeste si no hay personas en esas direcciones
-bueno(irNorte,S) :- agenteEnPosicion(X,Y,S), alNorte([I,J],[X,Y],S), ¬radar(_,I,J).
-bueno(irEste,S) :- agenteEnPosicion(X,Y,S), alEste([I,J],[X,Y],S), ¬radar(_,I,J).
-bueno(irSur,S) :- agenteEnPosicion(X,Y,S), alSur([I,J],[X,Y],S), ¬radar(_,I,J).
-bueno(irOeste,S) :- agenteEnPosicion(X,Y,S), alOeste([I,J],[X,Y],S), ¬radar(_,I,J).
+bueno(irNorte,S) :- agenteEnPosicion(X,Y,S), alNorte([I,J],[X,Y],S), not(radar(_,I,J)).
+bueno(irEste,S) :- agenteEnPosicion(X,Y,S), alEste([I,J],[X,Y],S), not(radar(_,I,J)).
+bueno(irSur,S) :- agenteEnPosicion(X,Y,S), alSur([I,J],[X,Y],S), not(radar(_,I,J)).
+bueno(irOeste,S) :- agenteEnPosicion(X,Y,S), alOeste([I,J],[X,Y],S), not(radar(_,I,J)).
 
 bestAction(noAction,S) :- goalReached(S),!.
 bestAction(X,S) :- excelente(X,S),!.

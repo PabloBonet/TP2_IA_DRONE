@@ -1,9 +1,13 @@
 package frsf.cidisi.exercise.situationCalculus;
 
 import frsf.cidisi.exercise.libreriaclases.Grafo;
+import frsf.cidisi.exercise.libreriaclases.Nodo;
+import frsf.cidisi.exercise.libreriaclases.Persona;
 import frsf.cidisi.faia.state.EnvironmentState;
 
+
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.Vector;
 
 public class StateMap extends EnvironmentState {
@@ -13,22 +17,30 @@ public class StateMap extends EnvironmentState {
     private int energiaDrone;
     private Point posicionDrone;
     private Grafo mapa;
-    //private Other señales;
+    private ArrayList<Nodo> señales;
 	
 	
-    public StateMap() {
+    public StateMap(Grafo grafo, Point posicionInicialDrone) {
         
-		//TODO: Complete Method
+    	
+		señales = new ArrayList<Nodo>();
+		mapa = new Grafo();
+		posicionDrone = posicionInicialDrone;
+		this.mapa = grafo;
 
         this.initState();
     }
 
     @Override
     public void initState() {
-        //TODO: Complete Method
+    	//Inicializa al done con 1000 undades de energía
+    	  this.energiaDrone = 1000;
+    	  
+    	  inicializarListaSeñales();
+          
     }
 
-
+    
     @Override
     public String toString() {
         String str = "";
@@ -57,15 +69,31 @@ public class StateMap extends EnvironmentState {
      public Grafo getMapa(){
         return mapa;
      }
-//     public void setmapa(Other arg){
-//        mapa = arg;
-//     }
-//     public Other getseñales(){
-//        return señales;
-//     }
-//     public void setseñales(Other arg){
-//        señales = arg;
-//     }
+
+     public ArrayList<Nodo> getseñales(){
+        return señales;
+     }
+     
+     /***
+      * Inicializa la lista de señales, copiado los nodos con personas del mapa
+      */
+     private void inicializarListaSeñales()
+     {
+     	for(Nodo n: this.mapa.getListaNodos())
+     	{
+     		if(n.getPersonas().size() > 0)
+     		{
+     			Point ubicacion = new Point();
+     			ubicacion.x = n.getPosX();
+     			ubicacion.y = n.getPosY();
+     			Nodo nodoNuevo=new Nodo(n.getId(), n.getPosX(), n.getPosY(), n.getVisitado());
+     			for(Persona p:n.getPersonas())
+     				nodoNuevo.agregarPersona(new Persona(p.getId(), p.getTipo()));
+     			señales.add(nodoNuevo);
+     		}
+     	}
+     }
+
 
     
 }

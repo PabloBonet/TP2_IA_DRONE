@@ -1,6 +1,9 @@
 package frsf.cidisi.exercise.situationCalculus;
 
+import frsf.cidisi.exercise.libreriaclases.Grafo;
 import frsf.cidisi.faia.agent.Action;
+
+import java.awt.Point;
 import java.util.Vector;
 import frsf.cidisi.faia.agent.Agent;
 import frsf.cidisi.faia.environment.Environment;
@@ -8,8 +11,8 @@ import frsf.cidisi.faia.environment.Environment;
 
 public class EnvironmentMap extends Environment {
 
-    public EnvironmentMap() {
-        this.environmentState = new StateMap();
+    public EnvironmentMap(Grafo mapa, Point posicionInicial) {
+        this.environmentState = new StateMap(mapa, posicionInicial);
     }
 
     @Override
@@ -29,7 +32,8 @@ public class EnvironmentMap extends Environment {
     public AgentDronePerception getPercept() {
         AgentDronePerception p = new AgentDronePerception();
 
-        //TODO: Complete Method
+        //obtiene la posición actual del drone
+        
 
         return p;
     }

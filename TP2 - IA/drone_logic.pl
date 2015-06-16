@@ -69,11 +69,6 @@ est(S1) :- S1 > 0,S is S1-1, executedAction(irOeste,S), agenteEnPosicion(X,Y,S),
 %                             Ranking de acciones                                 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%%%%%%VER SI SE PONE ACA O MAS ABAJO......
-goalReached(S) :- victimarioEncontrado(ID,S).
-goalReached(S) :- mapaVisitado(S).
-
-
 % Es excelente ir al norte, este, sur u oeste si la posición del drone es adyacente a la del victimario
 excelente(irNorte,S) :- adyacenteAlNorte(Xn,Yn,S), victimario(Xn,Yn,S).
 excelente(irEste,S) :- adyacenteAlEste(Xn,Yn,S), victimario(Xn,Yn,S).
@@ -115,13 +110,16 @@ alSur([I,J],[X,Y],S) :- agenteEnPosicion(X,Y,S), X=:=I, Y<J, adyacente(X,Y,I,J),
 alOeste([I,J],[X,Y],S) :- agenteEnPosicion(X,Y,S), Y=:=J, X>I, adyacente(X,Y,I,J), radar(_,I,J).
 
 
-%% Para saber cuándo el agente alcanza el objetivo%%%%%%%%%%%%%%
+%% Para saber cuándo el agente alcanza el objetivo
 mapaVisitado(S) :- visitado(0,0,S),visitado(70,0,S),visitado(130,0,S),
                    visitado(0,65,S),visitado(70,65,S),visitado(130,65,S),
                    visitado(0,135,S),visitado(70,135,S),visitado(130,135,S).
 
-%%goalReached(S) :- worldEmpty(S).
+%%% AGREGAR LOS ADYACENTES (adyacente(X,Y,I,J)), RADAR (radar(C,I,J)) Y EL VICTIMARIO (victimario(Xn,Yn,S))
 
+%%goalReached(S) :- worldEmpty(S).
+goalReached(S) :- victimarioEncontrado(ID,S).
+goalReached(S) :- mapaVisitado(S).
 
 
 

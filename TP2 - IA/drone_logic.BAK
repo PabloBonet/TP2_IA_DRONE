@@ -55,6 +55,7 @@ est(S1) :- S1 > 0,S is S1-1, executedAction(irEste,S), agenteEnPosicion(X,Y,S), 
 est(S1) :- S1 > 0,S is S1-1, executedAction(irSur,S), agenteEnPosicion(X,Y,S), adyacenteAlSur(Xs,Ys,S), not(visitada(Xs,Ys,S1)),asserta(visitada(Xs,Ys,S1)).
 est(S1) :- S1 > 0,S is S1-1, executedAction(irOeste,S), agenteEnPosicion(X,Y,S), adyacenteAlOeste(Xo,Yo,S), not(visitada(Xo,Yo,S1)),asserta(visitada(Xo,Yo,S1)).
 est(S1) :- S1 > 0,S is S1-1,visitada(X,Y,S),not(visitada(X,Y,S1)),asserta(visitada(X,Y,S1)).
+
 % Decrementar energía
 est(S1) :- S1 > 0,S is S1-1, movementAction(S), agenteEnPosicion(X,Y,S), not(radar(_,X,Y)), energiaAgente(E,S), E>0, asserta(energiaAgente(E-2,S1),).
 est(S1) :- S1 > 0,S is S1-1, movementAction(S), agenteEnPosicion(X,Y,S), radar(_,X,Y), energiaAgente(E,S), E>0, asserta(energiaAgente(E-1,S1),).
@@ -115,7 +116,7 @@ alSur([I,J],[X,Y],S) :- agenteEnPosicion(X,Y,S), X=:=I, Y<J, adyacente(X,Y,I,J),
 alOeste([I,J],[X,Y],S) :- agenteEnPosicion(X,Y,S), Y=:=J, X>I, adyacente(X,Y,I,J), radar(_,I,J).
 
 
-%% Para saber cuándo el agente alcanza el objetivo%%%%%%%%%%%%%%
+%% Para saber cuándo el agente alcanza el objetivo
 mapaVisitado(S) :- visitado(0,0,S),visitado(70,0,S),visitado(130,0,S),
                    visitado(0,65,S),visitado(70,65,S),visitado(130,65,S),
                    visitado(0,135,S),visitado(70,135,S),visitado(130,135,S).

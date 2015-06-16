@@ -11,8 +11,11 @@ import frsf.cidisi.faia.environment.Environment;
 
 public class EnvironmentMap extends Environment {
 
-    public EnvironmentMap(Grafo mapa, Point posicionInicial) {
+    /*public EnvironmentMap(Grafo mapa, Point posicionInicial) {
         this.environmentState = new StateMap(mapa, posicionInicial);
+    }*/
+	public EnvironmentMap() {
+        this.environmentState = new StateMap();
     }
 
     @Override

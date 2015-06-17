@@ -54,7 +54,24 @@ public class EnvironmentMap extends Environment {
          * */
         //obtiene la lista de señales
         
-        p.setSeñales(this.getEnvironmentState().getseñales());
+        int[][] señales = new int[9][3];
+        
+        int ind =0;
+        
+        for(Nodo n: this.getEnvironmentState().getseñales())
+        {
+        	int cantidad = n.getPersonas().size();
+        	Point punto = new Point(n.getPosX(), n.getPosY());
+        	if(n.getPersonas().size() > 0)
+        	{
+        
+        		señales[ind][0] =cantidad;
+        		señales[ind][1] = punto.x;
+        		señales[ind][2] = punto.y;
+        	}
+        	ind++;
+        }
+        p.setSeñales(señales);
         
        
         
@@ -62,6 +79,7 @@ public class EnvironmentMap extends Environment {
         //obtiene la cámara en posición
         Nodo nodoActual = this.getEnvironmentState().getMapa().nodoEnPosicion(this.getEnvironmentState().getposicionDrone());
         
+        System.out.println("Nodo: " + nodoActual.getId());
         for(Persona persona: nodoActual.getPersonas())
         {
         	if(persona.esVictimario())
@@ -96,22 +114,26 @@ public class EnvironmentMap extends Environment {
     		 // nodoAl(1, nodoActual) obtiene el nodo al norte(1). Al Este(2), Sur(3), Oeste(4)
     		 Nodo n = this.getEnvironmentState().getMapa().nodoAl(i,nodoActual);
     		 
-    		 for(Persona per: n.getPersonas())
-         	{
-         		if(per.esVictimario())
-         		{
-         			//copio en la matriz las posiciones del nodo que tiene victimario
-         			camara[i-1][0] = n.getPosX();
-         			camara[i-1][1] = n.getPosY();
-         			existeVictimario = true;
-         			break;
-         		}
-         		
-         	}	 
+    		 if(n!= null)
+    		 {
+    			 
     		 
+    			 for(Persona per: n.getPersonas())
+    			 {
+    				 if(per.esVictimario())
+    				 {
+    					 //copio en la matriz las posiciones del nodo que tiene victimario
+    					 camara[i-1][0] = n.getPosX();
+    					 camara[i-1][1] = n.getPosY();
+    					 existeVictimario = true;
+    					 break;
+    				 }
+         		
+    			 }	 
+    		 }
     		 
     		 i++;
-    	 }
+    	 }	
     	 
         p.setCamara(camara);	
     	      

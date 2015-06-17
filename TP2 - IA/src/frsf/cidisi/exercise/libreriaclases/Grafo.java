@@ -276,5 +276,89 @@ public class Grafo {
 		// TODO Auto-generated method stub
 		
 	}
+
+	public Nodo nodoAl(int direccion, Nodo nodoActual) {
+		
+		
+		switch(direccion)
+		{
+		case 1: return nodoAlNorte(nodoActual);
+		
+		case 2: return nodoAlEste(nodoActual);
+		
+		case 3: return nodoAlSur(nodoActual);
+		
+		case 4: return nodoAlOeste(nodoActual);
+		
+		}
+		return null;
+	}
 	
+	/**
+	 * Retorna el nodo adyacente al norte
+	 * */
+	private Nodo nodoAlNorte(Nodo nodoActual)
+	{
+		ArrayList<Nodo> adyacentes = this.buscarAdyacentes(nodoActual);
+		
+		for(Nodo n: adyacentes)
+		{
+			if(n.getPosX() == nodoActual.getPosX() && n.getPosY() < nodoActual.getPosY())
+			{
+				return n;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Retorna el nodo adyacente al este
+	 * */
+	private Nodo nodoAlEste(Nodo nodoActual)
+	{
+		ArrayList<Nodo> adyacentes = this.buscarAdyacentes(nodoActual);
+		
+		for(Nodo n: adyacentes)
+		{
+			if(n.getPosX() > nodoActual.getPosX() && n.getPosY() == nodoActual.getPosY())
+			{
+				return n;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Retorna el nodo adyacente al sur
+	 * */
+	private Nodo nodoAlSur(Nodo nodoActual)
+	{
+		ArrayList<Nodo> adyacentes = this.buscarAdyacentes(nodoActual);
+		
+		for(Nodo n: adyacentes)
+		{
+			if(n.getPosX() == nodoActual.getPosX() && n.getPosY() > nodoActual.getPosY())
+			{
+				return n;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Retorna el nodo adyacente al oeste
+	 * */
+	private Nodo nodoAlOeste(Nodo nodoActual)
+	{
+		ArrayList<Nodo> adyacentes = this.buscarAdyacentes(nodoActual);
+		
+		for(Nodo n: adyacentes)
+		{
+			if(n.getPosX() < nodoActual.getPosX() && n.getPosY() == nodoActual.getPosY())
+			{
+				return n;
+			}
+		}
+		return null;
+	}
 }

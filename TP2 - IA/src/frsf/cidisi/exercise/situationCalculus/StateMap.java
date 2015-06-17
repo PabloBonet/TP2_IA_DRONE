@@ -38,6 +38,8 @@ public class StateMap extends EnvironmentState {
     	mapa = new Grafo();
     	posicionDrone = new Point();
     	
+    	this.initState();
+    	
     }
 
     @Override
@@ -45,16 +47,18 @@ public class StateMap extends EnvironmentState {
     	//Inicializa al done con 1000 undades de energía
     	  this.energiaDrone = 1000;
     	  
+    	  
+    	  
     	  /* ---- CARGA NODOS ---- */ 
     	  Nodo nodo1 = new Nodo(1,0,0,false);
-    	  Nodo nodo2 = new Nodo(1,0,0,false);
-    	  Nodo nodo3 = new Nodo(1,0,0,false);
-    	  Nodo nodo4 = new Nodo(1,0,0,false);
-    	  Nodo nodo5 = new Nodo(1,0,0,false);
-    	  Nodo nodo6 = new Nodo(1,0,0,false);
-    	  Nodo nodo7 = new Nodo(1,0,0,false);
-    	  Nodo nodo8 = new Nodo(1,0,0,false);
-    	  Nodo nodo9 = new Nodo(1,0,0,false);
+    	  Nodo nodo2 = new Nodo(2,70,0,false);
+    	  Nodo nodo3 = new Nodo(3,130,0,false);
+    	  Nodo nodo4 = new Nodo(4,0,65,false);
+    	  Nodo nodo5 = new Nodo(5,70,65,false);
+    	  Nodo nodo6 = new Nodo(6,130,65,false);
+    	  Nodo nodo7 = new Nodo(7,0,135,false);
+    	  Nodo nodo8 = new Nodo(8,70,135,false);
+    	  Nodo nodo9 = new Nodo(9,130,135,false);
     	  
     	  Persona persona1 = new Persona(1, 0);
     	  

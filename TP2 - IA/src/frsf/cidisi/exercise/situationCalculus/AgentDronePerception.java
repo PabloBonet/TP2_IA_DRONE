@@ -38,8 +38,7 @@ public class AgentDronePerception extends SituationCalculusPerception {
         //agrego las señales a la percepcion
         for(int i = 0; i<9; i++)
         {
-        	for(int j = 0; j<3; j++)
-        	{
+        	
         		if(señales[i][0] > 0)
         		{
         			perceptionString.append("["+señales[i][0]+", "+ señales[i][1]+", "+señales[i][2]+"]");
@@ -49,19 +48,19 @@ public class AgentDronePerception extends SituationCalculusPerception {
         			perceptionString.append("[_, "+ señales[i][1]+", "+señales[i][2]+"]");
         		}
         		if( i!= 8)
-        		perceptionString.append(",");
-        	}
-        	
+        		perceptionString.append(", ");
+        	        	
         	
         }
         
+        perceptionString.append("], [");
       //Agrego elementos a la lista de cámaras
         for(int i = 0; i<4; i++)
         {
         	perceptionString.append("[" + camara[i][0]+ ", "+camara[i][1]+"]");
         	
         	if( i!= 3)
-        		perceptionString.append(",");
+        		perceptionString.append(", ");
         }
         
         perceptionString.append("], ");

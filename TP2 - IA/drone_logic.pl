@@ -20,10 +20,10 @@ radar(C,I,J) :- percepcion([_,_,_,_,_,_,_,[C,I,J],_],_,_,_,_,_), actualSituation
 radar(C,I,J) :- percepcion([_,_,_,_,_,_,_,_,[C,I,J]],_,_,_,_,_), actualSituation(S).
 
 
-victimario(I,J,S) :- percepcion(_,[[I,J],_,_,_],_,X,Y,_), actualSituation(S), alNorte([I,J], [X,Y],S).
-victimario(I,J,S) :- percepcion(_,[_,[I,J],_,_],_,X,Y,_), actualSituation(S), alEste([I,J], [X,Y],S).
-victimario(I,J,S) :- percepcion(_,[_,_,[I,J],_],_,X,Y,_), actualSituation(S), alSur([I,J], [X,Y],S).
-victimario(I,J,S) :- percepcion(_,[_,_,_,[I,J]],_,X,Y,_), actualSituation(S), alOeste([I,J], [X,Y],S).
+victimario(I,J,S) :- percepcion(_,[[I,J],_,_,_],_,X,Y,_), actualSituation(S), I >= 0, J >= 0, alNorte([I,J], [X,Y],S).
+victimario(I,J,S) :- percepcion(_,[_,[I,J],_,_],_,X,Y,_), actualSituation(S), I >= 0, J >= 0, alEste([I,J], [X,Y],S).
+victimario(I,J,S) :- percepcion(_,[_,_,[I,J],_],_,X,Y,_), actualSituation(S), I >= 0, J >= 0, alSur([I,J], [X,Y],S).
+victimario(I,J,S) :- percepcion(_,[_,_,_,[I,J]],_,X,Y,_), actualSituation(S), I >= 0, J >= 0, alOeste([I,J], [X,Y],S).
 
 
 energia(E,S) :- percepcion(_,_,_,_,_,E), actualSituation(S).

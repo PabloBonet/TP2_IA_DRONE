@@ -82,10 +82,10 @@ muyBueno(irSur,S) :- agenteEnPosicion(X,Y,S), alSur([I,J],[X,Y],S), radar(_,I,J)
 muyBueno(irOeste,S) :- agenteEnPosicion(X,Y,S), alOeste([I,J],[X,Y],S), radar(_,I,J), adyacenteAlOeste(Xo,Yo,S).
 
 % Es bueno ir hacia el norte, este, sur u oeste si no hay personas en esas direcciones
-bueno(irNorte,S) :- agenteEnPosicion(X,Y,S), alNorte([I,J],[X,Y],S), ¬radar(_,I,J).
-bueno(irEste,S) :- agenteEnPosicion(X,Y,S), alEste([I,J],[X,Y],S), ¬radar(_,I,J).
-bueno(irSur,S) :- agenteEnPosicion(X,Y,S), alSur([I,J],[X,Y],S), ¬radar(_,I,J).
-bueno(irOeste,S) :- agenteEnPosicion(X,Y,S), alOeste([I,J],[X,Y],S), ¬radar(_,I,J).
+bueno(irNorte,S) :- agenteEnPosicion(X,Y,S), alNorte([I,J],[X,Y],S), not(radar(_,I,J)).
+bueno(irEste,S) :- agenteEnPosicion(X,Y,S), alEste([I,J],[X,Y],S), not(radar(_,I,J)).
+bueno(irSur,S) :- agenteEnPosicion(X,Y,S), alSur([I,J],[X,Y],S), not(radar(_,I,J)).
+bueno(irOeste,S) :- agenteEnPosicion(X,Y,S), alOeste([I,J],[X,Y],S), not(radar(_,I,J)).
 
 bestAction(noAction,S) :- goalReached(S),!.
 bestAction(X,S) :- excelente(X,S),!.

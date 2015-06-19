@@ -39,6 +39,7 @@ public class SituationCalculus extends Solve {
                 kb.query(kb.getBestActionPredicate() + "(X," +
                 kb.getSituation() + ")");
 
+        
         // We look for the first result.
         if (results.length == 0) {
             throw new SituationCalculusException("No solutions returned. Maybe there is an error in the knowledge base.");

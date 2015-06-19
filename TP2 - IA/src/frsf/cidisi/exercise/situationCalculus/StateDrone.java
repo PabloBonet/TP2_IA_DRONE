@@ -46,7 +46,7 @@ public class StateDrone extends KnowledgeBase {
     public void initState() {
        
 		//Inicializo la KB 
-    	this.addKnowledge("agenteEnPosicion(0,0,0)");
+    	//this.addKnowledge("agenteEnPosicion(0,0,0)");
     	
 		
     }

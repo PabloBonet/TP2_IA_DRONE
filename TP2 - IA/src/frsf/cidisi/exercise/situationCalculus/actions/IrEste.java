@@ -28,8 +28,10 @@ public class IrEste extends SituationCalculusAction {
         //Actualiza la posición en el ambiente
         
         estadoAmbiente.setposicionDrone(puntoSiguiente);
+        int energia = estadoAmbiente.getenergiaDrone();
+        estadoAmbiente.setenergiaDrone(energia-1);
         
-        return est;
+        return estadoAmbiente;
     }
 
     @Override

@@ -1,10 +1,9 @@
 % The code below is neccessary for the framework to modify these sentences.
 
-%:- dynamic actualSituation/1,perception/5,executedAction/2,position/3,
-%food/3,enemy/3,empty/3,energy/2.
 
-:- dynamic radar/3, percepcion/6, victimario/3, executedAction/2, actualSituation/1, agenteEnPosicion/3.
+%:- dynamic radar/3, percepcion/6, victimario/3, executedAction/2, actualSituation/1, agenteEnPosicion/3.
 
+:- dynamic percepcion/6, executedAction/2, actualSituation/1, agenteEnPosicion/3, visitada/3.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                            Estado mapa                                         %
@@ -28,14 +27,12 @@
  adyacente(130,135,70,135).
  adyacente(0,135,70,135).
  adyacente(70,135,0,135).
- adyacente(70,135,130,135).
- adyacente(130,135,70,135).
- adyacente(70,65,70,135).
- adyacente(70,135,70,65).
+ adyacente(70,65,130,65).
+ adyacente(130,65,70,65).
+ adyacente(130,65,130,135).
+ adyacente(130,135,130,65).
  adyacente(70,0,70,65).
  adyacente(70,65,70,0).
-
-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -53,15 +50,15 @@ radar(C,I,J) :- percepcion([_,_,_,_,_,_,_,[C,I,J],_],_,_,_,_,_), C > 0.
 radar(C,I,J) :- percepcion([_,_,_,_,_,_,_,_,[C,I,J]],_,_,_,_,_), C > 0.
 
 
-victimario(I,J,S) :- percepcion(_,[[I,J],_,_,_],_,X,Y,_), actualSituation(S), I >= 0, J >= 0, alNorte([I,J], [X,Y],S).
-victimario(I,J,S) :- percepcion(_,[_,[I,J],_,_],_,X,Y,_), actualSituation(S), I >= 0, J >= 0, alEste([I,J], [X,Y],S).
-victimario(I,J,S) :- percepcion(_,[_,_,[I,J],_],_,X,Y,_), actualSituation(S), I >= 0, J >= 0, alSur([I,J], [X,Y],S).
-victimario(I,J,S) :- percepcion(_,[_,_,_,[I,J]],_,X,Y,_), actualSituation(S), I >= 0, J >= 0, alOeste([I,J], [X,Y],S).
+victimario(I,J,S) :- percepcion(_,[[I,J],_,_,_],_,X,Y,_), actualSituation(S), I >= 0, J >= 0.
+victimario(I,J,S) :- percepcion(_,[_,[I,J],_,_],_,X,Y,_), actualSituation(S), I >= 0, J >= 0.
+victimario(I,J,S) :- percepcion(_,[_,_,[I,J],_],_,X,Y,_), actualSituation(S), I >= 0, J >= 0.
+victimario(I,J,S) :- percepcion(_,[_,_,_,[I,J]],_,X,Y,_), actualSituation(S), I >= 0, J >= 0.
 
 
 energia(E,S) :- percepcion(_,_,_,_,_,E), actualSituation(S).
 
-posicionAgente(X,Y,S) :- percepcion(_,_,_,X,Y,_), actualSituation(S).
+agenteEnPosicion(X,Y,S) :- percepcion(_,_,_,X,Y,_), actualSituation(S).
 
 victimarioEncontrado(ID,S) :- percepcion(_,_,ID,_,_,_), ID > 0, actualSituation(S).
 
@@ -69,7 +66,7 @@ victimarioEncontrado(ID,S) :- percepcion(_,_,ID,_,_,_), ID > 0, actualSituation(
 %                             Reglas causales                                     %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-visitada(X,Y,S) :- posicionAgente(X,Y,S).
+visitada(X,Y,S) :- agenteEnPosicion(X,Y,S).
 
 movementAction(S) :- executedAction(alNorte,S).
 movementAction(S) :- executedAction(alEste,S).
@@ -89,8 +86,8 @@ est(S1) :- S1 > 0,S is S1-1, executedAction(irSur,S), adyacenteAlSur(Xs,Ys,S), n
 est(S1) :- S1 > 0,S is S1-1, executedAction(irOeste,S), adyacenteAlOeste(Xo,Yo,S), not(visitada(Xo,Yo,S1)),asserta(visitada(Xo,Yo,S1)).
 est(S1) :- S1 > 0,S is S1-1,visitada(X,Y,S),not(visitada(X,Y,S1)),asserta(visitada(X,Y,S1)).
 % Decrementar energía
-est(S1) :- S1 > 0,S is S1-1, movementAction(S), agenteEnPosicion(X,Y,S), not(radar(_,X,Y)), energiaAgente(E,S), E>0, asserta(energiaAgente(E-2,S1)).
-est(S1) :- S1 > 0,S is S1-1, movementAction(S), agenteEnPosicion(X,Y,S), radar(_,X,Y), energiaAgente(E,S), E>0, asserta(energiaAgente(E-1,S1)).
+est(S1) :- S1 > 0,S is S1-1, movementAction(S), agenteEnPosicion(X,Y,S), radar(C,X,Y), C=0, energiaAgente(E,S), E>0, asserta(energiaAgente(E-2,S1)).
+est(S1) :- S1 > 0,S is S1-1, movementAction(S), agenteEnPosicion(X,Y,S), radar(C,X,Y), C>0, energiaAgente(E,S), E>0, asserta(energiaAgente(E-1,S1)).
 
 % Cuando la acción ejecutada cambia la posición actual
 est(S1) :- S1 > 0,S is S1-1, executedAction(irNorte,S), adyacenteAlNorte(Xn,Yn,S), energiaAgente(E,S), E > 0,asserta(agenteEnPosicion(Xn,Yn,S1)).
@@ -103,22 +100,24 @@ est(S1) :- S1 > 0,S is S1-1, executedAction(irOeste,S), adyacenteAlOeste(Xo,Yo,S
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Es excelente ir al norte, este, sur u oeste si la posición del drone es adyacente a la del victimario
-excelente(irNorte,S) :- adyacenteAlNorte(Xn,Yn,S), victimario(Xn,Yn,S).
-excelente(irEste,S) :- adyacenteAlEste(Xn,Yn,S), victimario(Xn,Yn,S).
-excelente(irSur,S) :- adyacenteAlSur(Xn,Yn,S), victimario(Xn,Yn,S).
-excelente(irOeste,S) :- adyacenteAlOeste(Xn,Yn,S), victimario(Xn,Yn,S).
+excelente(irNorte,S) :- adyacenteAlNorte(Xn,Yn,S), victimario(Xn,Yn,S), actualSituation(S).
+excelente(irEste,S) :- adyacenteAlEste(Xn,Yn,S), victimario(Xn,Yn,S), actualSituation(S).
+excelente(irSur,S) :- adyacenteAlSur(Xn,Yn,S), victimario(Xn,Yn,S), actualSituation(S).
+excelente(irOeste,S) :- adyacenteAlOeste(Xn,Yn,S), victimario(Xn,Yn,S), actualSituation(S).
 
 % Es muy bueno ir hacia el norte, este, sur u oeste si hay personas en esas direcciones
-muyBueno(irNorte,S) :- agenteEnPosicion(X,Y,S), alNorte([I,J],[X,Y],S), radar(_,I,J).
-muyBueno(irEste,S) :- agenteEnPosicion(X,Y,S), alEste([I,J],[X,Y],S), radar(_,I,J).
-muyBueno(irSur,S) :- agenteEnPosicion(X,Y,S), alSur([I,J],[X,Y],S), radar(_,I,J).
-muyBueno(irOeste,S) :- agenteEnPosicion(X,Y,S), alOeste([I,J],[X,Y],S), radar(_,I,J).
+muyBueno(irNorte,S) :- agenteEnPosicion(X,Y,S), alNorte([I,J],[X,Y],S), radar(C,I,J), C>0, actualSituation(S).
+muyBueno(irEste,S) :- agenteEnPosicion(X,Y,S), alEste([I,J],[X,Y],S), radar(C,I,J), C>0, actualSituation(S).
+muyBueno(irSur,S) :- agenteEnPosicion(X,Y,S), alSur([I,J],[X,Y],S), radar(C,I,J), C>0, actualSituation(S).
+muyBueno(irOeste,S) :- agenteEnPosicion(X,Y,S), alOeste([I,J],[X,Y],S), radar(C,I,J), C>0, actualSituation(S).
 
 % Es bueno ir hacia el norte, este, sur u oeste si no hay personas en esas direcciones
-bueno(irNorte,S) :- agenteEnPosicion(X,Y,S), alNorte([I,J],[X,Y],S), not(radar(_,I,J)).
-bueno(irEste,S) :- agenteEnPosicion(X,Y,S), alEste([I,J],[X,Y],S), not(radar(_,I,J)).
-bueno(irSur,S) :- agenteEnPosicion(X,Y,S), alSur([I,J],[X,Y],S), not(radar(_,I,J)).
-bueno(irOeste,S) :- agenteEnPosicion(X,Y,S), alOeste([I,J],[X,Y],S), not(radar(_,I,J)).
+bueno(irNorte,S) :- agenteEnPosicion(X,Y,S), alNorte([I,J],[X,Y],S), radar(C,I,J), C is 0, actualSituation(S).
+bueno(irEste,S) :- agenteEnPosicion(X,Y,S), alEste([I,J],[X,Y],S), radar(C,I,J), C is 0, actualSituation(S).
+bueno(irSur,S) :- agenteEnPosicion(X,Y,S), alSur([I,J],[X,Y],S), radar(C,I,J), C is 0, actualSituation(S).
+bueno(irOeste,S) :- agenteEnPosicion(X,Y,S), alOeste([I,J],[X,Y],S), radar(C,I,J), C is 0, actualSituation(S).
+
+
 
 bestAction(noAction,S) :- goalReached(S),!.
 bestAction(X,S) :- excelente(X,S),!.
@@ -131,17 +130,26 @@ bestAction(X,S) :- bueno(X,S),!.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Posición adyacente hacia una dirección (norte, este, sur, oeste) en la situación S
-adyacenteAlNorte(Xn, Yn, S) :- agenteEnPosicion(X,Y,S), X=:=Xn, Y>Yn, adyacente(X,Y,Xn,Yn).
-adyacenteAlEste(Xe, Ye, S) :- agenteEnPosicion(X,Y,S), Y=:=Ye, X<Xe, adyacente(X,Y,Xe,Ye).
-adyacenteAlSur(Xs, Ys, S) :- agenteEnPosicion(X,Y,S), X=:=Xs, Y<Ys, adyacente(X,Y,Xs,Ys).
-adyacenteAlOeste(Xo, Yo, S) :- agenteEnPosicion(X,Y,S), Y=:=Yo, X>Xo, adyacente(X,Y,Xo,Yo).
+adyacenteAlNorte(Xn, Yn, S) :- agenteEnPosicion(X,Y,S), adyacente(X,Y,Xn,Yn), X == Xn, Y>Yn.
+adyacenteAlEste(Xe, Ye, S) :- agenteEnPosicion(X,Y,S), adyacente(X,Y,Xe,Ye), Y == Ye, X<Xe.
+adyacenteAlSur(Xs, Ys, S) :- agenteEnPosicion(X,Y,S), adyacente(X,Y,Xs,Ys), X == Xs, Y<Ys.
+adyacenteAlOeste(Xo, Yo, S) :- agenteEnPosicion(X,Y,S), adyacente(X,Y,Xo,Yo), Y == Yo, X>Xo.
 
 % Posición ubicada en una dirección desde la esquina actual en la situación S
-alNorte([I,J],[X,Y],S) :- agenteEnPosicion(X,Y,S), X=:=I, Y>J.
-alEste([I,J],[X,Y],S) :- agenteEnPosicion(X,Y,S), Y=:=J, X<I.
-alSur([I,J],[X,Y],S) :- agenteEnPosicion(X,Y,S), X=:=I, Y<J.
-alOeste([I,J],[X,Y],S) :- agenteEnPosicion(X,Y,S), Y=:=J, X>I.
+%alNorte([I,J],[X,Y],S) :- agenteEnPosicion(X,Y,S), X == I, Y>J.
+%alEste([I,J],[X,Y],S) :- agenteEnPosicion(X,Y,S), Y == J, X<I.
+%alSur([I,J],[X,Y],S) :- agenteEnPosicion(X,Y,S), X == I, Y<J.
+%alOeste([I,J],[X,Y],S) :- agenteEnPosicion(X,Y,S), Y == J, X>I.
 
+alNorte([I,J],[X,Y],S) :- agenteEnPosicion(X,Y,S), adyacente(X,Y,W,Z), adyacente(W,Z,I,J), X == I, Y>J.
+alEste([I,J],[X,Y],S) :- agenteEnPosicion(X,Y,S), adyacente(X,Y,W,Z), adyacente(W,Z,I,J), Y == J, X<I.
+alSur([I,J],[X,Y],S) :- agenteEnPosicion(X,Y,S), adyacente(X,Y,W,Z), adyacente(W,Z,I,J), X == I, Y<J.
+alOeste([I,J],[X,Y],S) :- agenteEnPosicion(X,Y,S), adyacente(X,Y,W,Z), adyacente(W,Z,I,J), Y == J, X>I.
+
+alNorte([I,J],[X,Y],S) :- agenteEnPosicion(X,Y,S), adyacente(X,Y,I,J), X == I, Y>J.
+alEste([I,J],[X,Y],S) :- agenteEnPosicion(X,Y,S), adyacente(X,Y,I,J), Y == J, X<I.
+alSur([I,J],[X,Y],S) :- agenteEnPosicion(X,Y,S), adyacente(X,Y,I,J), X == I, Y<J.
+alOeste([I,J],[X,Y],S) :- agenteEnPosicion(X,Y,S), adyacente(X,Y,I,J), Y == J, X>I.
 
 %% Para saber cuándo el agente alcanza el objetivo
 mapaVisitado(S) :- visitada(0,0,S),visitada(70,0,S),visitada(130,0,S),
@@ -150,10 +158,8 @@ mapaVisitado(S) :- visitada(0,0,S),visitada(70,0,S),visitada(130,0,S),
 
 %%% AGREGAR LOS ADYACENTES (adyacente(X,Y,I,J)), RADAR (radar(C,I,J)) Y EL VICTIMARIO (victimario(Xn,Yn,S))
 
-%%goalReached(S) :- worldEmpty(S).
 goalReached(S) :- victimarioEncontrado(ID,S).
 goalReached(S) :- mapaVisitado(S).
-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

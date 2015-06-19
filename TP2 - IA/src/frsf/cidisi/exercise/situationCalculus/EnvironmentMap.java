@@ -47,11 +47,7 @@ public class EnvironmentMap extends Environment {
         p.setEnergia(this.getEnvironmentState().getenergiaDrone());
         
         
-        /*
-         * 
-         * FALTA COMPLETAR!!
-         * 
-         * */
+       
         //obtiene la lista de señales
         
         int[][] señales = new int[9][3];

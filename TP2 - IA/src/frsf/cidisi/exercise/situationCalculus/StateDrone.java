@@ -45,7 +45,9 @@ public class StateDrone extends KnowledgeBase {
     @Override
     public void initState() {
        
-		//TODO: Complete Method
+		//Inicializo la KB 
+    	this.addKnowledge("agenteEnPosicion(0,0,0)");
+    	
 		
     }
 

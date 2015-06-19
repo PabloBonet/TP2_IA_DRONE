@@ -45,7 +45,7 @@ public class AgentDronePerception extends SituationCalculusPerception {
         		}
         		else
         		{
-        			perceptionString.append("[_, "+ señales[i][1]+", "+señales[i][2]+"]");
+        			perceptionString.append("[0, "+ señales[i][1]+", "+señales[i][2]+"]");
         		}
         		if( i!= 8)
         		perceptionString.append(", ");

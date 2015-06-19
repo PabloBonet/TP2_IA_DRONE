@@ -48,7 +48,7 @@ public class FuncionesAuxiliares {
 		Nodo nodoActual = grafo.nodoEnPosicion(ubicacionActual);
 
 		for (Nodo n : grafo.buscarAdyacentes(nodoActual)) {
-			// verifica que haya un nodo mas al norte de la posicion actual 
+			// verifica que haya un nodo mas al oeste de la posicion actual 
 			if (n.getPosX() < ubicacionActual.x && n.getPosY() == ubicacionActual.y)
 			 {
 				return n;
@@ -61,7 +61,7 @@ public class FuncionesAuxiliares {
 		Nodo nodoActual = grafo.nodoEnPosicion(ubicacionActual);
 
 		for (Nodo n : grafo.buscarAdyacentes(nodoActual)) {
-			// verifica que haya un nodo mas al norte de la posicion actual 
+			// verifica que haya un nodo mas al este de la posicion actual 
 			if (n.getPosX() > ubicacionActual.x && n.getPosY() == ubicacionActual.y)
 			 {
 				return n;
@@ -74,8 +74,8 @@ public class FuncionesAuxiliares {
 		Nodo nodoActual = grafo.nodoEnPosicion(ubicacionActual);
 
 		for (Nodo n : grafo.buscarAdyacentes(nodoActual)) {
-			// verifica que haya un nodo mas al norte de la posicion actual 
-			if (n.getPosX() > ubicacionActual.x && n.getPosY() < ubicacionActual.y)
+			// verifica que haya un nodo mas al sur de la posicion actual 
+			if (n.getPosX() == ubicacionActual.x && n.getPosY() > ubicacionActual.y)
 			 {
 				return n;
 			}

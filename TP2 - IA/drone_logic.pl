@@ -3,7 +3,7 @@
 
 %:- dynamic radar/3, percepcion/6, victimario/3, executedAction/2, actualSituation/1, agenteEnPosicion/3.
 
-:- dynamic percepcion/6, executedAction/2, actualSituation/1, agenteEnPosicion/3, visitada/3.
+:- dynamic percepcion/6, executedAction/2, actualSituation/1, agenteEnPosicion/3, visitada/3, victimario/3.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                            Estado mapa                                         %
@@ -89,6 +89,9 @@ est(S1) :- S1 > 0,S is S1-1,visitada(X,Y,S),not(visitada(X,Y,S1)),asserta(visita
 
 est(S1) :- S1 > 0,S is S1-1, movementAction(S), agenteEnPosicion(X,Y,S), radar(C,X,Y), energiaAgente(E,S), E>0, asserta(energiaAgente(E-1,S1)).
 est(S1) :- S1 > 0,S is S1-1, movementAction(S), agenteEnPosicion(X,Y,S), not(radar(C,X,Y)), energiaAgente(E,S), E>0, asserta(energiaAgente(E-2,S1)).
+
+%Marca posicion del victimario
+est(S1) :- S1 > 0,S is S1-1,victimario(X,Y,S),not(victimario(X,Y,S1)),asserta(victimario(X,Y,S1)).
 
 
 % Cuando la acción ejecutada cambia la posición actual

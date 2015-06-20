@@ -70,6 +70,43 @@ Point posicionActual = this.getPosicionActual();
        str = str + "\nPosición: "+ posicionActual.x + ", " + posicionActual.y;
        str = str + "\nEnergía: "+ this.getEnergiaActual();
        
+       int [][] señales = this.getSeñales();
+       
+       str = str + "\nSeñales: ";
+       for(int i = 0; i < señales.length; i++)
+       {
+    	   if(señales[i][0] != 0) //si no tiene señal en esa posición
+    	   {
+    		   str = str + "\nNodo " + (i+1) + ": Posición: "+ señales[i][1] + ", " + señales[i][2]+ ". Cantidad de personas: " + señales[i][0];   
+    	   }
+    	   
+       }
+       
+       //Muestra la posición del victimario, 
+       Point posicionVictimario = this.getPosicionVictimario();
+       if(posicionVictimario.x != -1 && posicionVictimario.y != -1)
+       {
+    	   str= str + "\nPosición del victimario: " + posicionVictimario.x + ", "+ posicionVictimario.y;   
+       }
+       else
+       {
+    	   str= str + "\nAún no se conoce la posición del victimario";
+       }
+    	   
+      int idVictimario = this.getIdVictimario();
+      if(idVictimario == 0)
+      {
+    	  str = str + "\nAún no se identificó al victimario";
+      }
+      else
+      {
+    	  str = str + "\n\n\n****************************************";
+    	  str = str + "\n*** Se ha encontrado al victimario!! ***";
+    	  str = str + "\n****************************************\n";
+    	  str= str + "\nPosición del victimario: " + posicionVictimario.x + ", "+ posicionVictimario.y;
+    	  str= str + "\nID del victimario: " + idVictimario + "";
+    	  str = str + "\n\n****************************************\n\n\n";
+      }
        
         return str;
     }
@@ -102,6 +139,75 @@ Point posicionActual = this.getPosicionActual();
     	int e = Integer.parseInt(result[0].get("E").toString());
         
     	return e;
+    }
+    
+    /**
+     * Función que realiza la consulta a la base de conocimiento y devuelve la lista de señales del agente
+     * */
+    private int[][] getSeñales()
+    {
+    	int [][] señales = new int[9][3];
+    	
+    	String consultarSeñales = "radar(C,I,J)";
+    	
+    	Hashtable[] result = this.query(consultarSeñales);
+    	
+    	for(int i = 0; i < result.length; i++)
+    	{
+    		int c = Integer.parseInt(result[i].get("C").toString());
+    		int x = Integer.parseInt(result[i].get("I").toString());
+    		int y = Integer.parseInt(result[i].get("J").toString());
+    		
+    		señales[i][0] = c;
+    		señales[i][1] = x;
+    		señales[i][2] = y;
+    	}
+    	
+    	return señales;
+    }
+    
+    /**
+     * Función que consulta la base de conocimiento para saber la posición el victimario
+     * si todavía no la conoce, retorna como posición (-1,-1).
+     * */
+    private Point getPosicionVictimario()
+    {	
+    	Point posicion;
+    	
+    	String consultarVictimario = "victimario(I,J,"+ this.getSituation() + ")";
+    	
+    	if(this.queryHasSolution(consultarVictimario)) {
+			Hashtable[] result = this.query(consultarVictimario);
+			
+			int x = Integer.parseInt(result[0].get("I").toString());
+        	int y = Integer.parseInt(result[0].get("J").toString());
+        	
+        	posicion = new Point(x,y);
+        	return posicion;
+		}
+    	
+    	return new Point (-1,-1);
+    }
+    
+    /**
+     * Función que retorna el ID del victimario si lo identifica
+     * Si todavía no conoce el ID retorna un Id = 0
+     * */
+    private int getIdVictimario()
+    {
+    	int id = 0;
+    	
+    	String consultarIdVictimario = "victimarioEncontrado(ID,"+ this.getSituation() + ")";
+    	
+    	if(this.queryHasSolution(consultarIdVictimario)) {
+			Hashtable[] result = this.query(consultarIdVictimario);
+			
+		 id = Integer.parseInt(result[0].get("ID").toString());
+        	
+        	return id;
+		}
+    	
+    	return id;
     }
     
     

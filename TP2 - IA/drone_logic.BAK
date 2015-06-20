@@ -90,6 +90,9 @@ est(S1) :- S1 > 0,S is S1-1,visitada(X,Y,S),not(visitada(X,Y,S1)),asserta(visita
 est(S1) :- S1 > 0,S is S1-1, movementAction(S), agenteEnPosicion(X,Y,S), radar(C,X,Y), energiaAgente(E,S), E>0, asserta(energiaAgente(E-1,S1)).
 est(S1) :- S1 > 0,S is S1-1, movementAction(S), agenteEnPosicion(X,Y,S), not(radar(C,X,Y)), energiaAgente(E,S), E>0, asserta(energiaAgente(E-2,S1)).
 
+%Marca posicion del victimario
+est(S1) :- S1 > 0,S is S1-1,victimario(X,Y,S),not(victimario(X,Y,S1)),asserta(victimario(X,Y,S1)).
+
 
 % Cuando la acción ejecutada cambia la posición actual
 est(S1) :- S1 > 0,S is S1-1, executedAction(irNorte,S), adyacenteAlNorte(Xn,Yn,S), energiaAgente(E,S), E > 0,asserta(agenteEnPosicion(Xn,Yn,S1)).
@@ -176,38 +179,4 @@ mapaVisitado(S) :- visitada(0,0,S),visitada(70,0,S),visitada(130,0,S),
 
 goalReached(S) :- victimarioEncontrado(ID,S).
 goalReached(S) :- mapaVisitado(S).
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%                             Improvement proposal                                %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% The agent could save the average enery lost when fighting and moving. This way,
-% when evaluating actions, it can decide to fight if and only if the average energy
-% lost when fighting is less than the actual energy. The same can be done when
-% it decides to move.
-
-%%% Count elements in a list
-% count([],0):-!.
-% count([_|Ls],C):-count(Ls,T),C is T+1.
-
-%%% Calculate the average in a list
-% average(L,P):-count(L,C),C=:=0,P is 0,!.
-% average(L,P):-sumlist(L,S), length(L,C), P is (S/C).
-
-% fightingEnergyData([],1):-!.
-% fightingEnergyData([D|Ds],S1):-S0 is S1-1,executedAction(pelear,S0),energy(E0,S0),energy(E1,S1),D is E1-E0,fightingEnergyData(Ds,S0),!.
-% fightingEnergyData(D,S1):-S0 is S1-1,fightingEnergyData(D,S0),!.
-
-% movingEnergyData([],1):-!.
-% movingEnergyData([D|Ds],S1):-S0 is S1-1,movementAction(S0),energy(E0,S0),energy(E1,S1),D is E1-E0,movingEnergyData(Ds,S0),!.
-% movingEnergyData(D,S1):-S0 is S1-1,movingEnergyData(D,S0),!.
-
-% averageWhenFighting(0,1):-!.
-% averageWhenFighting(P,S):-fightingEnergyData(Es,S),average(Es,P).
-
-% averageWhenMoving(0,1):-!.
-% averageWhenMoving(P,S):-movingEnergyData(Es,S),average(Es,P).
-
-
 

@@ -64,7 +64,99 @@ public class StateMap extends EnvironmentState {
     public String toString() {
         String str = "";
 	    
-	    //TODO: Complete Method
+        str = str + "\nEnergia Drone: " + this.getenergiaDrone();
+        str = str + "\nPosición Drone: " + this.getposicionDrone().x + ", " + this.getposicionDrone().y;
+        str = str + "\nSeñales: ";
+        
+        for(Nodo s: this.getseñales())
+        {
+        	str = str + "\nEsquina: " + s.getId() + ". Señal(cantidad de personas): " + s.getPersonas().size();
+        }
+        int  col = 0;
+        
+               
+        str = str + "\nMapa (cantidad personas): \n";
+        for(Nodo n: this.getMapa().getListaNodos())
+        {
+        	
+        	str = str  + "    " + n.getPersonas().size();
+        	
+        		if(col == 2)
+        		{
+        			str = str + "\n";
+        			col = -1;
+        		}
+        			
+        		col ++;
+        }
+        Nodo nodoVictimario = this.victimarioEnNodo();
+        Nodo nodoAgente = this.mapa.nodoEnPosicion(this.posicionDrone);
+        
+        str = str + "\nMapa (Peronas y Agente): \n";
+        for(Nodo n: this.getMapa().getListaNodos())
+        {
+        	
+        	if(n.getId() == nodoVictimario.getId())
+        	{
+        		if(n.getId() == nodoAgente.getId())
+        		{
+        			str = str  + "    *";
+        		}
+        		else
+        		{
+        			int idVic = -1;
+        			
+        			for(Persona p: nodoVictimario.getPersonas())
+        			{
+        				if(p.esVictimario())
+        				{
+        					idVic = p.getId();
+        				}
+        			}
+        			str = str  + "    "+idVic;	
+        		}
+        	
+        		
+        	}
+        	else
+        	{
+        		if(n.getId() == nodoAgente.getId())
+        		{
+        			str = str  + "    D";
+        		}
+        		else
+        		{
+        			if(n.getVisitado())
+        			{
+        				str = str  + "    .";
+        			}
+        			else
+        			{
+        				if(n.getPersonas().size() > 0)
+            			{
+            				str = str  + "    P";
+            			}
+            			else
+            			{
+            				str = str  + "    _";
+            			}
+        			}
+        			
+        			
+        		}
+        	}
+        	
+        	
+        		if(col == 2)
+        		{
+        			str = str + "\n";
+        			col = -1;
+        		}
+        			
+        		col ++;
+        }
+        
+               
 	    
         return str;
     }
@@ -113,10 +205,33 @@ public class StateMap extends EnvironmentState {
      	}
      }
      
+     /**
+      * Retorna el nodo donde se encuentra el victimario
+      * */
+     private Nodo victimarioEnNodo()
+     {
+    	 Nodo nodo = null;
+    	 for(Nodo n: this.getMapa().getListaNodos())
+    	 {
+    		 for(Persona p: n.getPersonas())
+    		 {
+    			 if(p.esVictimario())
+    			 {
+    				 return n;
+    			 }
+    		 }
+    	 }
+    	 
+    	 return nodo;
+     }
+     
      private void cargaEscenario1()
      {
     	 
-    	 posicionDrone = new Point(0,0);
+    
+    	 
+    	 
+    	 
     	 /* ---- CARGA NODOS ---- */ 
    	  Nodo nodo1 = new Nodo(1,0,0,false);
    	  Nodo nodo2 = new Nodo(2,70,0,false);
@@ -172,6 +287,9 @@ public class StateMap extends EnvironmentState {
    	  nodo8.agregarPersona(persona13);
    	  nodo8.agregarPersona(persona14);
    	  
+   
+ 	 
+ 	 
    	  
    	  mapa.getListaNodos().add(nodo1);
    	  mapa.getListaNodos().add(nodo2);  
@@ -234,12 +352,27 @@ public class StateMap extends EnvironmentState {
    	  mapa.getListaEnlaces().add(e22);
    	  mapa.getListaEnlaces().add(e23);
    	  mapa.getListaEnlaces().add(e24);
+   	  
+   	  
+ 	 //Establece posicion del drone  y marca la posición actual como visitado 
+  	 posicionDrone = new Point(0,0);
+  	 
+  	 
+  	 
+  	 
+     for(Nodo n: this.mapa.getListaNodos())
+     {
+     	if(n.getPosX() == posicionDrone.x && n.getPosY() == posicionDrone.y)
+     	{
+     		n.visitar();
+     	}
+     }
+  	 
      }
 
      private void cargaEscenario2()
      {
-    	//Posicion drone 
-    	 posicionDrone = new Point(130,0);
+    	
     	 
     	 
     	 /* ---- CARGA NODOS ---- */ 
@@ -366,6 +499,21 @@ public class StateMap extends EnvironmentState {
    	  mapa.getListaEnlaces().add(e22);
    	  mapa.getListaEnlaces().add(e23);
    	  mapa.getListaEnlaces().add(e24);
+   	  
+   	  
+   	  
+   	//Posicion drone 
+ 	 posicionDrone = new Point(130,0);
+   	 
+   	 
+      for(Nodo n: this.mapa.getListaNodos())
+      {
+      	if(n.getPosX() == posicionDrone.x && n.getPosY() == posicionDrone.y)
+      	{
+      		n.visitar();
+      	}
+      }
+   	 
      }
 
     

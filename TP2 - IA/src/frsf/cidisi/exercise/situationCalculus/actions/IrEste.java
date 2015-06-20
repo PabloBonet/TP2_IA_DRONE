@@ -28,8 +28,17 @@ public class IrEste extends SituationCalculusAction {
         //Actualiza la posición en el ambiente
         
         estadoAmbiente.setposicionDrone(puntoSiguiente);
+        
         int energia = estadoAmbiente.getenergiaDrone();
         estadoAmbiente.setenergiaDrone(energia-1);
+        
+        for(Nodo n: estadoAmbiente.getMapa().getListaNodos())
+        {
+        	if(n.getPosX() == puntoSiguiente.x && n.getPosY() == puntoSiguiente.y)
+        	{
+        		n.visitar();
+        	}
+        }
         
         return estadoAmbiente;
     }

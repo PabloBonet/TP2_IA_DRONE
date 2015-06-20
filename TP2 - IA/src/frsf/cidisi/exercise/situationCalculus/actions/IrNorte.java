@@ -30,6 +30,14 @@ public class IrNorte extends SituationCalculusAction {
         int energia = estadoAmbiente.getenergiaDrone();
         estadoAmbiente.setenergiaDrone(energia-1);
         
+        for(Nodo n: estadoAmbiente.getMapa().getListaNodos())
+        {
+        	if(n.getPosX() == puntoSiguiente.x && n.getPosY() == puntoSiguiente.y)
+        	{
+        		n.visitar();
+        	}
+        }
+        
         return estadoAmbiente;
     }
 

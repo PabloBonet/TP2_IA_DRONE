@@ -147,16 +147,6 @@ adyacenteAlEste(Xe, Ye, S) :- agenteEnPosicion(X,Y,S), adyacente(X,Y,Xe,Ye), Y =
 adyacenteAlSur(Xs, Ys, S) :- agenteEnPosicion(X,Y,S), adyacente(X,Y,Xs,Ys), X == Xs, Y<Ys.
 adyacenteAlOeste(Xo, Yo, S) :- agenteEnPosicion(X,Y,S), adyacente(X,Y,Xo,Yo), Y == Yo, X>Xo.
 
-% Posición ubicada en una dirección desde la esquina actual en la situación S
-%alNorte([I,J],[X,Y],S) :- agenteEnPosicion(X,Y,S), X == I, Y>J.
-%alEste([I,J],[X,Y],S) :- agenteEnPosicion(X,Y,S), Y == J, X<I.
-%alSur([I,J],[X,Y],S) :- agenteEnPosicion(X,Y,S), X == I, Y<J.
-%alOeste([I,J],[X,Y],S) :- agenteEnPosicion(X,Y,S), Y == J, X>I.
-
-%alNorte([I,J],[X,Y],S) :- agenteEnPosicion(X,Y,S), adyacente(X,Y,I,J), X == I, Y>J.
-%alEste([I,J],[X,Y],S) :- agenteEnPosicion(X,Y,S), adyacente(X,Y,I,J), Y == J, X<I.
-%alSur([I,J],[X,Y],S) :- agenteEnPosicion(X,Y,S), adyacente(X,Y,I,J), X == I, Y<J.
-%alOeste([I,J],[X,Y],S) :- agenteEnPosicion(X,Y,S), adyacente(X,Y,I,J), Y == J, X>I.
 
 alNorte([I,J],[X,Y],S) :- agenteEnPosicion(X,Y,S), adyacenteAlNorte(I,J,S).
 alEste([I,J],[X,Y],S) :- agenteEnPosicion(X,Y,S), adyacenteAlEste(I,J,S).

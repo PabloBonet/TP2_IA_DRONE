@@ -3,7 +3,7 @@
 
 %:- dynamic radar/3, percepcion/6, victimario/3, executedAction/2, actualSituation/1, agenteEnPosicion/3.
 
-:- dynamic percepcion/6, executedAction/2, actualSituation/1, agenteEnPosicion/3, visitada/3.
+:- dynamic percepcion/6, executedAction/2, actualSituation/1, agenteEnPosicion/3, visitada/3, victimario/3.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                            Estado mapa                                         %

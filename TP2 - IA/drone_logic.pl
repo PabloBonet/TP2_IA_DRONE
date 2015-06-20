@@ -86,8 +86,10 @@ est(S1) :- S1 > 0,S is S1-1, executedAction(irSur,S), adyacenteAlSur(Xs,Ys,S), n
 est(S1) :- S1 > 0,S is S1-1, executedAction(irOeste,S), adyacenteAlOeste(Xo,Yo,S), not(visitada(Xo,Yo,S1)),asserta(visitada(Xo,Yo,S1)).
 est(S1) :- S1 > 0,S is S1-1,visitada(X,Y,S),not(visitada(X,Y,S1)),asserta(visitada(X,Y,S1)).
 % Decrementar energía
-est(S1) :- S1 > 0,S is S1-1, movementAction(S), agenteEnPosicion(X,Y,S), radar(C,X,Y), C=0, energiaAgente(E,S), E>0, asserta(energiaAgente(E-2,S1)).
-est(S1) :- S1 > 0,S is S1-1, movementAction(S), agenteEnPosicion(X,Y,S), radar(C,X,Y), C>0, energiaAgente(E,S), E>0, asserta(energiaAgente(E-1,S1)).
+
+est(S1) :- S1 > 0,S is S1-1, movementAction(S), agenteEnPosicion(X,Y,S), radar(C,X,Y), energiaAgente(E,S), E>0, asserta(energiaAgente(E-1,S1)).
+est(S1) :- S1 > 0,S is S1-1, movementAction(S), agenteEnPosicion(X,Y,S), not(radar(C,X,Y)), energiaAgente(E,S), E>0, asserta(energiaAgente(E-2,S1)).
+
 
 % Cuando la acción ejecutada cambia la posición actual
 est(S1) :- S1 > 0,S is S1-1, executedAction(irNorte,S), adyacenteAlNorte(Xn,Yn,S), energiaAgente(E,S), E > 0,asserta(agenteEnPosicion(Xn,Yn,S1)).
@@ -106,23 +108,23 @@ excelente(irSur,S) :- adyacenteAlSur(Xn,Yn,S), victimario(Xn,Yn,S), actualSituat
 excelente(irOeste,S) :- adyacenteAlOeste(Xn,Yn,S), victimario(Xn,Yn,S), actualSituation(S).
 
 % Es muy bueno ir hacia el norte, este, sur u oeste si hay victimarios en esas direcciones y todavia no se visito la esquina
-muyBueno(irNorte,S) :- agenteEnPosicion(X,Y,S), alNorte([I,J],[X,Y],S), radar(C,I,J), C>0, actualSituation(S), not(visitada(I,J,_)), victimario(I,J,_).
-muyBueno(irEste,S) :- agenteEnPosicion(X,Y,S), alEste([I,J],[X,Y],S), radar(C,I,J), C>0, actualSituation(S), not(visitada(I,J,_)), victimario(I,J,_).
-muyBueno(irSur,S) :- agenteEnPosicion(X,Y,S), alSur([I,J],[X,Y],S), radar(C,I,J), C>0, actualSituation(S), not(visitada(I,J,_)), victimario(I,J,_).
-muyBueno(irOeste,S) :- agenteEnPosicion(X,Y,S), alOeste([I,J],[X,Y],S), radar(C,I,J), C>0, actualSituation(S), not(visitada(I,J,_)), victimario(I,J,_).
+muyBueno(irNorte,S) :- agenteEnPosicion(X,Y,S), alNorte([I,J],[X,Y],S), radar(C,I,J), C>0, actualSituation(S), not(visitada(I,J,S)), victimario(I,J,S).
+muyBueno(irEste,S) :- agenteEnPosicion(X,Y,S), alEste([I,J],[X,Y],S), radar(C,I,J), C>0, actualSituation(S), not(visitada(I,J,S)), victimario(I,J,S).
+muyBueno(irSur,S) :- agenteEnPosicion(X,Y,S), alSur([I,J],[X,Y],S), radar(C,I,J), C>0, actualSituation(S), not(visitada(I,J,S)), victimario(I,J,S).
+muyBueno(irOeste,S) :- agenteEnPosicion(X,Y,S), alOeste([I,J],[X,Y],S), radar(C,I,J), C>0, actualSituation(S), not(visitada(I,J,S)), victimario(I,J,S).
 
 %Es bueno ir hacia el norte, este, sur u oeste si hay personas en esas direcciones y todavia no se visito la esquina
-bueno(irNorte,S) :- agenteEnPosicion(X,Y,S), alNorte([I,J],[X,Y],S), radar(C,I,J), C>0, actualSituation(S), not(visitada(I,J,_)).
-bueno(irEste,S) :- agenteEnPosicion(X,Y,S), alEste([I,J],[X,Y],S), radar(C,I,J), C>0, actualSituation(S), not(visitada(I,J,_)).
-bueno(irSur,S) :- agenteEnPosicion(X,Y,S), alSur([I,J],[X,Y],S), radar(C,I,J), C>0, actualSituation(S), not(visitada(I,J,_)).
-bueno(irOeste,S) :- agenteEnPosicion(X,Y,S), alOeste([I,J],[X,Y],S), radar(C,I,J), C>0, actualSituation(S), not(visitada(I,J,_)).
+bueno(irNorte,S) :- agenteEnPosicion(X,Y,S), alNorte([I,J],[X,Y],S), radar(C,I,J), C>0, actualSituation(S), not(visitada(I,J,S)).
+bueno(irEste,S) :- agenteEnPosicion(X,Y,S), alEste([I,J],[X,Y],S), radar(C,I,J), C>0, actualSituation(S), not(visitada(I,J,S)).
+bueno(irSur,S) :- agenteEnPosicion(X,Y,S), alSur([I,J],[X,Y],S), radar(C,I,J), C>0, actualSituation(S), not(visitada(I,J,S)).
+bueno(irOeste,S) :- agenteEnPosicion(X,Y,S), alOeste([I,J],[X,Y],S), radar(C,I,J), C>0, actualSituation(S), not(visitada(I,J,S)).
 
 
 % Es regular ir hacia el norte, este, sur u oeste si no hay personas en esas direcciones
-regular(irNorte,S) :- agenteEnPosicion(X,Y,S), alNorte([I,J],[X,Y],S), radar(C,I,J), actualSituation(S), not(visitada(I,J,_)).
-regular(irEste,S) :- agenteEnPosicion(X,Y,S), alEste([I,J],[X,Y],S), radar(C,I,J), actualSituation(S), not(visitada(I,J,_)).
-regular(irSur,S) :- agenteEnPosicion(X,Y,S), alSur([I,J],[X,Y],S), radar(C,I,J), actualSituation(S), not(visitada(I,J,_)).
-regular(irOeste,S) :- agenteEnPosicion(X,Y,S), alOeste([I,J],[X,Y],S), radar(C,I,J), actualSituation(S), not(visitada(I,J,_)).
+regular(irNorte,S) :- agenteEnPosicion(X,Y,S), alNorte([I,J],[X,Y],S), actualSituation(S), not(visitada(I,J,S)).
+regular(irEste,S) :- agenteEnPosicion(X,Y,S), alEste([I,J],[X,Y],S), actualSituation(S), not(visitada(I,J,S)).
+regular(irSur,S) :- agenteEnPosicion(X,Y,S), alSur([I,J],[X,Y],S), actualSituation(S), not(visitada(I,J,S)).
+regular(irOeste,S) :- agenteEnPosicion(X,Y,S), alOeste([I,J],[X,Y],S), actualSituation(S), not(visitada(I,J,S)).
 
 
 
@@ -130,7 +132,7 @@ bestAction(noAction,S) :- goalReached(S),!.
 bestAction(X,S) :- excelente(X,S),!.
 bestAction(X,S) :- muyBueno(X,S),!.
 bestAction(X,S) :- bueno(X,S),!.
-%bestAction(X,S) :- regular(X,S),!.
+bestAction(X,S) :- regular(X,S),!.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                             Sentencias extras                                   %
@@ -174,38 +176,4 @@ mapaVisitado(S) :- visitada(0,0,S),visitada(70,0,S),visitada(130,0,S),
 
 goalReached(S) :- victimarioEncontrado(ID,S).
 goalReached(S) :- mapaVisitado(S).
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%                             Improvement proposal                                %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% The agent could save the average enery lost when fighting and moving. This way,
-% when evaluating actions, it can decide to fight if and only if the average energy
-% lost when fighting is less than the actual energy. The same can be done when
-% it decides to move.
-
-%%% Count elements in a list
-% count([],0):-!.
-% count([_|Ls],C):-count(Ls,T),C is T+1.
-
-%%% Calculate the average in a list
-% average(L,P):-count(L,C),C=:=0,P is 0,!.
-% average(L,P):-sumlist(L,S), length(L,C), P is (S/C).
-
-% fightingEnergyData([],1):-!.
-% fightingEnergyData([D|Ds],S1):-S0 is S1-1,executedAction(pelear,S0),energy(E0,S0),energy(E1,S1),D is E1-E0,fightingEnergyData(Ds,S0),!.
-% fightingEnergyData(D,S1):-S0 is S1-1,fightingEnergyData(D,S0),!.
-
-% movingEnergyData([],1):-!.
-% movingEnergyData([D|Ds],S1):-S0 is S1-1,movementAction(S0),energy(E0,S0),energy(E1,S1),D is E1-E0,movingEnergyData(Ds,S0),!.
-% movingEnergyData(D,S1):-S0 is S1-1,movingEnergyData(D,S0),!.
-
-% averageWhenFighting(0,1):-!.
-% averageWhenFighting(P,S):-fightingEnergyData(Es,S),average(Es,P).
-
-% averageWhenMoving(0,1):-!.
-% averageWhenMoving(P,S):-movingEnergyData(Es,S),average(Es,P).
-
-
 

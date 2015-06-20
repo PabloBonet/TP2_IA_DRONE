@@ -22,7 +22,7 @@ public class StateDrone extends KnowledgeBase {
         super("drone_logic.pl");
 
         //Mapa
-        mapa = new Grafo();
+      //  mapa = new Grafo();
     	
         this.initState();
     }
@@ -59,7 +59,7 @@ public class StateDrone extends KnowledgeBase {
     	//this.addKnowledge("agenteEnPosicion(0,0,0)");
     	
     	//Carga el mapa (nodos y enlaces) sin personas
-    	cargaMapa();
+    	//cargaMapa();
 		
     }
 

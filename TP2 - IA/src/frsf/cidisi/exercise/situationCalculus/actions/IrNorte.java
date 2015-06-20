@@ -17,6 +17,8 @@ public class IrNorte extends SituationCalculusAction {
         StateDrone estadoAgente = (StateDrone) ast;
         StateMap estadoAmbiente = (StateMap) est;
         
+      //obtiene la posición actual
+        Point posicionActual = new Point(estadoAmbiente.getposicionDrone());
         
         //obtiene la siguiente esquina al norte
         
@@ -27,17 +29,40 @@ public class IrNorte extends SituationCalculusAction {
         //Actualiza la posición en el ambiente
         
         estadoAmbiente.setposicionDrone(puntoSiguiente);
-        int energia = estadoAmbiente.getenergiaDrone();
-        estadoAmbiente.setenergiaDrone(energia-1);
+      //Decrementa energía. -1 si hay personas, -2 si no hay
+        boolean hayPersonas = false;
+        
+        for(Nodo s: estadoAmbiente.getMapa().getListaNodos())
+        {
+        	if(s.getPosX() == posicionActual.x && s.getPosY() == posicionActual.y )
+        	{
+        		if(s.getPersonas().size() > 0)
+        			hayPersonas = true;
+        		break;
+        	}
+        	
+        }
+    	int energia = estadoAmbiente.getenergiaDrone();
+    	if(hayPersonas)
+        {
+        	System.out.println("Hay Personas");
+            estadoAmbiente.setenergiaDrone(energia-1);
+            	
+        }
+        else
+        {
+        	System.out.println("NO Hay Personas");
+            estadoAmbiente.setenergiaDrone(energia-2);
+        } 
+        //Marca el nodo actual como visitado
         
         for(Nodo n: estadoAmbiente.getMapa().getListaNodos())
         {
-        	if(n.getPosX() == puntoSiguiente.x && n.getPosY() == puntoSiguiente.y)
+        	if(n.getPosX() == posicionActual.x && n.getPosY() == posicionActual.y)
         	{
         		n.visitar();
         	}
         }
-        
         return estadoAmbiente;
     }
 

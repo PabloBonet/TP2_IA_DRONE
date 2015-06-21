@@ -13,19 +13,21 @@ public class AgentDroneMain {
      * @throws PrologConnectorException
      */
 	
-	//static UIVentanaPrincipal ventanaPrincipal;
+	static UIVentanaPrincipal ventanaPrincipal;
     public static void main(String[] args) throws PrologConnectorException {
         
     	
     	
-    	//ventanaPrincipal = new UIVentanaPrincipal();
+    	  ventanaPrincipal = new UIVentanaPrincipal();
     	
     	//Posición inicial
     ///	Point posicionInicial = new Point(0,0);
     	
         AgentDrone agent = new AgentDrone();
-       // EnvironmentMap environment = new EnvironmentMap(ventanaPrincipal.getGrafo(), posicionInicial);
-        EnvironmentMap environment = new EnvironmentMap();
+        EnvironmentMap environment = new EnvironmentMap(ventanaPrincipal.getGrafo(), posicionInicial);
+        //EnvironmentMap environment = new EnvironmentMap();
+        
+      
         SituationCalculusBasedAgentSimulator simulator =
                 new SituationCalculusBasedAgentSimulator(environment, agent);
 

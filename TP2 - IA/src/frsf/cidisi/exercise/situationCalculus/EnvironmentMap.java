@@ -21,6 +21,11 @@ public class EnvironmentMap extends Environment {
 	public EnvironmentMap() {
         this.environmentState = new StateMap();
     }
+	
+	public EnvironmentMap(Grafo mapa, Point posicion)
+	{
+		 this.environmentState = new StateMap(mapa, posicion);
+	}
 
     @Override
     public StateMap getEnvironmentState() {

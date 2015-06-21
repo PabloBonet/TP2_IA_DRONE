@@ -42,6 +42,15 @@ public class StateMap extends EnvironmentState {
     	
     }
 
+    public StateMap(Grafo grafo, Point posicion)
+    {
+    	señales = new ArrayList<Nodo>();
+    	mapa = new Grafo();
+    	posicionDrone = new Point();
+    	
+    	this.initState(grafo, posicion);
+    	
+    }
     @Override
     public void initState() {
     	//Inicializa al done con 1000 undades de energía
@@ -53,6 +62,19 @@ public class StateMap extends EnvironmentState {
     	  //cargaEscenario2();
     	 
     	  cargaEscenario3();
+    	  
+    	  
+    	  inicializarListaSeñales();
+          
+    }
+    
+    public void initState(Grafo mapa, Point posicion) {
+    	//Inicializa al done con 1000 undades de energía
+    	  this.energiaDrone = 1000;
+
+
+    	  this.mapa = mapa;
+    	  this.posicionDrone = posicion;
     	  
     	  
     	  inicializarListaSeñales();
@@ -624,6 +646,9 @@ public class StateMap extends EnvironmentState {
      
    	 
      }
+     
+     
+    
 
     
 }

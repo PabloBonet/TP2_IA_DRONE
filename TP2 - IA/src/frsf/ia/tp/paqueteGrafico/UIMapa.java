@@ -38,22 +38,26 @@ public class UIMapa extends Canvas {
 		drone = new ImageIcon("imagenes/drone.png").getImage();
 	}
 	
-	@Override
+	
 	/**
 	 * Se reescribe el metodo paint que se hereda de Canvas
 	 */
 	public void paint(Graphics g) {
+		super.paint(g);
 		g.drawImage(fondo, 0, 0, getWidth(), getHeight(), this);
 		
 		//dibujarCuadrantes(g);
 		dibujarNodos(g,grafo);
 		//dibujarArcosEntreNodos(g, grafo);
-		//g.drawImage(drone,0,0, this);
+		//g.drawImage(drone,200,0, this);
 		
 		if(estadoDrone != null)
 		{
 			
-			g.drawImage(drone,estadoDrone.getPosicionVictimario().x,estadoDrone.getPosicionVictimario().y, this);
+			int x = estadoDrone.getPosicionActual().x;
+			int y = estadoDrone.getPosicionActual().y;
+			drone = new ImageIcon("imagenes/drone.png").getImage();
+			g.drawImage(drone,100,100, this);
 		}
 	}
 	
@@ -75,8 +79,8 @@ public class UIMapa extends Canvas {
 			//cuenta las personas en el nodo
 			
 			int cantPersonas = grafo.getListaNodos().get(i).getPersonas().size();
-			if(estadoDrone != null)
-			System.out.println("Estado Drone: posicion: " + estadoDrone.getPosicionActual().x + " " + estadoDrone.getPosicionActual().y);
+			/*if(estadoDrone != null)
+			System.out.println("Estado Drone: posicion: " + estadoDrone.getPosicionActual().x + " " + estadoDrone.getPosicionActual().y);*/
 			//coloca el color al nodo dependiendo si tiene victimarios
 			if(grafo.getListaNodos().size() > 0)
 			{
@@ -100,31 +104,66 @@ public class UIMapa extends Canvas {
 			int desplazarX = 0;
 			int desplazarY = 0;
 			
-			if(i < 3)
+			switch(i)
 			{
-				desplazarY = 25;
+			case 0:
 				desplazarX = 25;
-			}
-			else
-			{
-				if(i > 2 && i < 6)
-				{
-					desplazarY = 200;
-					desplazarX = 25;
-				}
-				else
-				{
-					desplazarY = 375;
-					desplazarX = 25;
-				}
+				desplazarY = 25;
+				
+				break;
+			case 1:
+				desplazarX = 210;
+				desplazarY = 25;
+				
+				break;
+			case 2:
+				
+				desplazarX = 400;
+				desplazarY = 25;
+				
+				break;
+			case 3:
+				desplazarX = 25;
+				desplazarY = 200;
+				
+				break;
+			case 4:
+				desplazarX = 210;
+				desplazarY = 200;
+				
+				break;
+			case 5:
+				desplazarX = 400;
+				desplazarY = 200;
+				
+				break;
+			case 6:
+				desplazarX = 25;
+				desplazarY = 370;
+				
+				break;
+			case 7:
+				desplazarX = 210;
+				desplazarY = 370;
+				
+				break;
+			case 8:
+				desplazarX = 400;
+				desplazarY = 370;
+				
+				break;
+				
 			}
 			
-			g.fillOval(grafo.getListaNodos().get(i).getPosX()*3 +desplazarX,grafo.getListaNodos().get(i).getPosY() + desplazarY ,18,18);
+			g.fillOval(grafo.getListaNodos().get(i).getPosX()+desplazarX,grafo.getListaNodos().get(i).getPosY() + desplazarY ,25,25);
 			//String esquina = Integer.toString(grafo.getListaNodos().get(i).getId());
 			g.setColor(Color.black);
 			//g.drawString(esquina, grafo.getListaNodos().get(i).getPosX(),grafo.getListaNodos().get(i).getPosY());
 			String personas = Integer.toString(cantPersonas);
-			g.drawString(personas, grafo.getListaNodos().get(i).getPosX()+5,grafo.getListaNodos().get(i).getPosY()+5);
+			g.drawString(personas, grafo.getListaNodos().get(i).getPosX()+desplazarX+10,grafo.getListaNodos().get(i).getPosY()+desplazarY+15);
+			g.setColor(Color.blue);
+			String ubicacion = "["+grafo.getListaNodos().get(i).getPosX()+ ", " + grafo.getListaNodos().get(i).getPosY()+"]";
+			g.drawString(ubicacion, grafo.getListaNodos().get(i).getPosX()+desplazarX-15,grafo.getListaNodos().get(i).getPosY()+desplazarY);
 		}
 	}
 	

@@ -129,8 +129,30 @@ public class EnvironmentMap extends Environment {
     					 existeVictimario = true;
     					 break;
     				 }
+    				
          		
-    			 }	 
+    			 }
+    			 if(!existeVictimario)
+    			 {
+    				 Nodo n2 = this.getEnvironmentState().getMapa().nodoAl(i,n);
+        			 if(n2 != null)
+        			 {
+        				 for(Persona per: n2.getPersonas())
+            			 {
+            				 if(per.esVictimario())
+            				 {
+            					 //copio en la matriz las posiciones del nodo que tiene victimario
+            					 camara[i-1][0] = n2.getPosX();
+            					 camara[i-1][1] = n2.getPosY();
+            					 existeVictimario = true;
+            					 break;
+            				 }
+            				
+                 		
+            			 }
+        			 }
+    			 }
+    			
     		 }
     		 
     		 i++;

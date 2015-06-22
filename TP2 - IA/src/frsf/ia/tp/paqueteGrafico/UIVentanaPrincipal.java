@@ -9,6 +9,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JMenu;
+import javax.swing.JOptionPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 
@@ -28,6 +29,8 @@ import javax.swing.JLabel;
 import javax.swing.JButton;
 import java.awt.FlowLayout;
 import javax.swing.SwingConstants;
+
+import java.awt.Point;
 import java.awt.SystemColor;
 import java.awt.Font;
 import java.awt.GridBagLayout;
@@ -49,6 +52,7 @@ public class UIVentanaPrincipal extends JFrame implements EventHandler{
 	private boolean datosCargados;
 	private StateDrone estadoDrone;
 	private StateMap estadoMapa;
+	public Point posicionInicial;
 	
 	JPanel panelGrafico;
 	JPanel panelInformativo;
@@ -87,6 +91,7 @@ public class UIVentanaPrincipal extends JFrame implements EventHandler{
 	private void inicializarVentanaPrincipal() {
 
 		datosCargados = false;
+		
 		setTitle("TP IA 2015 - Vehiculo Aéreo No Tripulado (VANT)");
 
 		// tamaño de la ventana principal
@@ -170,9 +175,9 @@ public class UIVentanaPrincipal extends JFrame implements EventHandler{
 		panel.add(panelEstado, BorderLayout.CENTER);
 		GridBagLayout gbl_panelEstado = new GridBagLayout();
 		gbl_panelEstado.columnWidths = new int[]{0, 0, 0, 0};
-		gbl_panelEstado.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0};
+		gbl_panelEstado.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0};
 		gbl_panelEstado.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gbl_panelEstado.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_panelEstado.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		panelEstado.setLayout(gbl_panelEstado);
 		
 		lblEnergia = new JLabel("Energ\u00EDa:");
@@ -194,7 +199,6 @@ public class UIVentanaPrincipal extends JFrame implements EventHandler{
 		lblSeniales =  new JTextArea("Señales:");
 		lblSeniales.setEditable(false);
 		
-		
 		 GridBagConstraints gbc_lblSeniales = new GridBagConstraints();
 		gbc_lblSeniales.insets = new Insets(0, 0, 5, 0);
 		gbc_lblSeniales.gridx = 2;
@@ -205,13 +209,13 @@ public class UIVentanaPrincipal extends JFrame implements EventHandler{
 		GridBagConstraints gbc_lblVictimarioIdentificado = new GridBagConstraints();
 		gbc_lblVictimarioIdentificado.insets = new Insets(0, 0, 5, 0);
 		gbc_lblVictimarioIdentificado.gridx = 2;
-		gbc_lblVictimarioIdentificado.gridy = 5;
+		gbc_lblVictimarioIdentificado.gridy = 6;
 		panelEstado.add(lblVictimarioIdentificado, gbc_lblVictimarioIdentificado);
 		
 		lblPosicionVictimario = new JLabel("Posici\u00F3n del victimario:");
 		GridBagConstraints gbc_lblPosicionVictimario = new GridBagConstraints();
 		gbc_lblPosicionVictimario.gridx = 2;
-		gbc_lblPosicionVictimario.gridy = 6;
+		gbc_lblPosicionVictimario.gridy = 7;
 		panelEstado.add(lblPosicionVictimario, gbc_lblPosicionVictimario);
 		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -321,17 +325,39 @@ public class UIVentanaPrincipal extends JFrame implements EventHandler{
 						
 						ventanaGrafica = new UIVentanaGrafica(grafo);
 						//ventanaGrafica = new UIVentanaGrafica(grafo, estadoDrone);
-						System.out.println("CREA VENTANA GRAFICA");
+						//System.out.println("CREA VENTANA GRAFICA");
 						ventanaGrafica.setAutoscrolls(true);
 						panelGrafico.add(ventanaGrafica);
 						ventanaGrafica.setVisible(true);
 						ventanaGrafica.repaint();
 						
-						datosCargados = true;
+						
+						
+						//Carga la posicion inicial del drone.
+						/*posicionInicial = new Point();
+						
+						//String posicion = JOptionPane.showInputDialog(this, "Indique la posición del drone. \nDebe ser con formato: x,y", "Posición del drone", JOptionPane.QUESTION_MESSAGE);
+						
+						UIDialogPosicion ventanaPosicion = new UIDialogPosicion();
+					  	  
+					  	  ventanaPosicion.show();
+					  	  
+					  	  posicionInicial = new Point(ventanaPosicion.posX, ventanaPosicion.posY);
+					  	
+					  	//ventanaPosicion.wait();
+					  	  System.out.println("POSx: " + ventanaPosicion.posX  + " posY: " + ventanaPosicion.posY);
+					  	
+						if(ventanaPosicion.b_ok)
+						{
+							System.out.println("b_ok");
+							datosCargados = true;
+							ventanaPosicion = null;
+						}
+							*/
 						/*luego tomar los datos del grafo y setearlos en la tabla que se muestra en pantalla**/
 
 						//Completar
-
+						datosCargados = true;
 					} else {
 						throw new FormatoDeArchivoNoValidoException();
 					}
@@ -389,6 +415,7 @@ public class UIVentanaPrincipal extends JFrame implements EventHandler{
 		       }
 		       this.lblSeniales.setText(str);
 		       
+		      
 		       str = "";
 		       
 		       if(estadoDrone.getIdVictimario() == 0)
@@ -404,20 +431,37 @@ public class UIVentanaPrincipal extends JFrame implements EventHandler{
 		       }
 		       
 		       this.lblVictimarioIdentificado.setText(str);
-		       
-		       str = "";
-		       str= str + "Posición del victimario: " + estadoDrone.getPosicionVictimario().x + ", "+ estadoDrone.getPosicionVictimario().y;
-		     	
+		       if( estadoDrone.getPosicionVictimario().x != -1 && estadoDrone.getPosicionVictimario().y != -1)
+		       {
+		    	   str = "Cámara: ";
+			       str= str + "Posición del victimario: " + estadoDrone.getPosicionVictimario().x + ", "+ estadoDrone.getPosicionVictimario().y;
+			     	   
+		       }
+		       else
+		       {
+		    	   str = "";
+		       }
+		      
 		       this.lblPosicionVictimario.setText(str);
 		       
 		       str = "";
 		       
-		      
+		       panel.remove(ventanaGrafica);
+		       ventanaGrafica = new UIVentanaGrafica(grafo);
+				//ventanaGrafica = new UIVentanaGrafica(grafo, estadoDrone);
+				//System.out.println("CREA VENTANA GRAFICA");
+				ventanaGrafica.setAutoscrolls(true);
+				ventanaGrafica.setEstadoAgente(estadoDrone);
+				panelGrafico.add(ventanaGrafica);
+				ventanaGrafica.setVisible(true);
+				//ventanaGrafica.repaint();
 			
+				//ventanaGrafica.remove(mapa);
+				
 			//pl.inicializarPercepcion(estadoAmbiente,estadoRonly);
 			//ventanaGrafica.mapa = new UIMapa(grafo);
 			//ventanaGrafica.mapa.setEstadoAgente(estadoDrone);
-	    	
+	    	//ventanaGrafica.mapa.repaint();
     	}
 	}
 

@@ -157,13 +157,22 @@ public class UIMapa extends Canvas {
 			
 			g.fillOval(grafo.getListaNodos().get(i).getPosX()+desplazarX,grafo.getListaNodos().get(i).getPosY() + desplazarY ,25,25);
 			//String esquina = Integer.toString(grafo.getListaNodos().get(i).getId());
-			g.setColor(Color.black);
-			//g.drawString(esquina, grafo.getListaNodos().get(i).getPosX(),grafo.getListaNodos().get(i).getPosY());
-			String personas = Integer.toString(cantPersonas);
-			g.drawString(personas, grafo.getListaNodos().get(i).getPosX()+desplazarX+10,grafo.getListaNodos().get(i).getPosY()+desplazarY+15);
-			g.setColor(Color.blue);
-			String ubicacion = "["+grafo.getListaNodos().get(i).getPosX()+ ", " + grafo.getListaNodos().get(i).getPosY()+"]";
-			g.drawString(ubicacion, grafo.getListaNodos().get(i).getPosX()+desplazarX-15,grafo.getListaNodos().get(i).getPosY()+desplazarY);
+			
+				if(grafo.getListaNodos().get(i).getVisitado())
+				{
+					g.setColor(Color.yellow);
+					g.fillOval(grafo.getListaNodos().get(i).getPosX()+desplazarX,grafo.getListaNodos().get(i).getPosY() + desplazarY ,25,25);
+					//g.drawImage(drone,grafo.getListaNodos().get(i).getPosX()+desplazarX,grafo.getListaNodos().get(i).getPosY() + desplazarY, this);
+				}
+				
+				g.setColor(Color.black);
+				//g.drawString(esquina, grafo.getListaNodos().get(i).getPosX(),grafo.getListaNodos().get(i).getPosY());
+				String personas = Integer.toString(cantPersonas);
+				g.drawString(personas, grafo.getListaNodos().get(i).getPosX()+desplazarX+10,grafo.getListaNodos().get(i).getPosY()+desplazarY+15);
+				g.setColor(Color.blue);
+				String ubicacion = "["+grafo.getListaNodos().get(i).getPosX()+ ", " + grafo.getListaNodos().get(i).getPosY()+"]";
+				g.drawString(ubicacion, grafo.getListaNodos().get(i).getPosX()+desplazarX-15,grafo.getListaNodos().get(i).getPosY()+desplazarY);
+				
 		}
 	}
 	

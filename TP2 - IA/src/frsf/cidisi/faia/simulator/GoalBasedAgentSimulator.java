@@ -19,6 +19,7 @@ package frsf.cidisi.faia.simulator;
 
 import java.util.Vector;
 
+import frsf.cidisi.exercise.situationCalculus.AgentDroneMain;
 import frsf.cidisi.faia.agent.GoalBasedAgent;
 import frsf.cidisi.faia.agent.Agent;
 import frsf.cidisi.faia.agent.Action;
@@ -26,6 +27,7 @@ import frsf.cidisi.faia.agent.Perception;
 import frsf.cidisi.faia.environment.Environment;
 import frsf.cidisi.faia.simulator.events.EventType;
 import frsf.cidisi.faia.simulator.events.SimulatorEventNotifier;
+import frsf.ia.tp.paqueteGrafico.UIVentanaPrincipal;
 
 public abstract class GoalBasedAgentSimulator extends Simulator {
 
@@ -75,6 +77,10 @@ public abstract class GoalBasedAgentSimulator extends Simulator {
             System.out.println("Perception: " + perception);
 
             System.out.println("Agent State: " + agent.getAgentState());
+            
+            //Actualizo el estado del agente en el grafico
+            
+            
             System.out.println("Environment: " + environment);
 
             System.out.println("Asking the agent for an action...");
@@ -86,8 +92,14 @@ public abstract class GoalBasedAgentSimulator extends Simulator {
 
             System.out.println("Action returned: " + action);
             System.out.println();
-
+            SimulatorEventNotifier.runEventHandlers(EventType.IterationFinished, new Object[] {action} );
             this.actionReturned(agent, action);
+            try {
+				Thread.sleep(4000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
         } while (!this.agentSucceeded(action) && !this.agentFailed(action));
 

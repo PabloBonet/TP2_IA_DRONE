@@ -10,12 +10,18 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JSeparator;
+import javax.swing.JTextArea;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.border.TitledBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import frsf.cidisi.exercise.libreriaclases.*;
+import frsf.cidisi.exercise.situationCalculus.StateDrone;
+import frsf.cidisi.exercise.situationCalculus.StateMap;
+import frsf.cidisi.faia.simulator.events.EventHandler;
+import frsf.cidisi.faia.simulator.events.EventType;
 import frsf.ia.tp.exceciones.*;
 import java.awt.Color;
 import javax.swing.JLabel;
@@ -23,10 +29,14 @@ import javax.swing.JButton;
 import java.awt.FlowLayout;
 import javax.swing.SwingConstants;
 import java.awt.SystemColor;
+import java.awt.Font;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
 
 
 
-public class UIVentanaPrincipal extends JFrame {
+public class UIVentanaPrincipal extends JFrame implements EventHandler{
 	
 	
 	//Atributos publicos para manejar la simulación
@@ -37,6 +47,8 @@ public class UIVentanaPrincipal extends JFrame {
 	private Converter datos;
 	private ConverterEscenario nodosEscenario;
 	private boolean datosCargados;
+	private StateDrone estadoDrone;
+	private StateMap estadoMapa;
 	
 	JPanel panelGrafico;
 	JPanel panelInformativo;
@@ -51,11 +63,14 @@ public class UIVentanaPrincipal extends JFrame {
 	private JMenuItem mnItemSalir;
 	private JMenuItem mnItemVerCuadrantes;
 	private JPanel panel;
-	private JLabel lblNewLabel;
-	private JPanel panel_1;
-	private JButton btnIniciar;
-	private JButton btnPausar;
-	private JButton btnDetener;
+	private JLabel lblEstadoDelDrone;
+	private JPanel panelEstado;
+	private JLabel lblEnergia;
+	private JLabel lblPosicion;
+	//private JLabel lblSeniales;
+	private JTextArea lblSeniales;
+	private JLabel lblVictimarioIdentificado;
+	private JLabel lblPosicionVictimario;
 
 	public UIVentanaPrincipal() {
 		
@@ -134,38 +149,70 @@ public class UIVentanaPrincipal extends JFrame {
 				64, 64, 64), 2, true), "Area Informativa", TitledBorder.CENTER,
 				TitledBorder.TOP, null, Color.DARK_GRAY));
 		panelInformativo.setVisible(true);
-		panelInformativo.setLayout(new BorderLayout(0, 0));
 
 		// Se agregan los JPanels a la ventana principal
 		getContentPane().add(panelGrafico);
 		getContentPane().add(panelInformativo);
+		panelInformativo.setLayout(new BorderLayout(0, 0));
 		
 		panel = new JPanel();
 		panel.setBackground(SystemColor.activeCaption);
-		panelInformativo.add(panel, BorderLayout.NORTH);
+		panelInformativo.add(panel);
 		panel.setLayout(new BorderLayout(0, 0));
 		
-		lblNewLabel = new JLabel("PANEL DE CONTROL");
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		panel.add(lblNewLabel, BorderLayout.NORTH);
+		lblEstadoDelDrone = new JLabel("Estado del Drone");
+		lblEstadoDelDrone.setBackground(Color.WHITE);
+		lblEstadoDelDrone.setHorizontalAlignment(SwingConstants.CENTER);
+		lblEstadoDelDrone.setFont(new Font("Arial", Font.PLAIN, 18));
+		panel.add(lblEstadoDelDrone, BorderLayout.NORTH);
 		
-		panel_1 = new JPanel();
-		panel_1.setBackground(SystemColor.inactiveCaption);
-		panel.add(panel_1, BorderLayout.CENTER);
-		panel_1.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		panelEstado = new JPanel();
+		panel.add(panelEstado, BorderLayout.CENTER);
+		GridBagLayout gbl_panelEstado = new GridBagLayout();
+		gbl_panelEstado.columnWidths = new int[]{0, 0, 0, 0};
+		gbl_panelEstado.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0};
+		gbl_panelEstado.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_panelEstado.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		panelEstado.setLayout(gbl_panelEstado);
 		
-		btnIniciar = new JButton("INICIAR");
-		btnIniciar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-			}
-		});
-		panel_1.add(btnIniciar);
+		lblEnergia = new JLabel("Energ\u00EDa:");
+		GridBagConstraints gbc_lblEnergia = new GridBagConstraints();
+		gbc_lblEnergia.insets = new Insets(0, 0, 5, 0);
+		gbc_lblEnergia.gridx = 2;
+		gbc_lblEnergia.gridy = 2;
+		panelEstado.add(lblEnergia, gbc_lblEnergia);
 		
-		btnPausar = new JButton("PAUSAR");
-		panel_1.add(btnPausar);
+		lblPosicion = new JLabel("Posici\u00F3n:");
+		GridBagConstraints gbc_lblPosicion = new GridBagConstraints();
+		gbc_lblPosicion.insets = new Insets(0, 0, 5, 0);
+		gbc_lblPosicion.gridx = 2;
+		gbc_lblPosicion.gridy = 3;
+		panelEstado.add(lblPosicion, gbc_lblPosicion);
 		
-		btnDetener = new JButton("DETENER");
-		panel_1.add(btnDetener);
+		
+		//lblSeniales = new JLabel("Señales:");
+		lblSeniales =  new JTextArea("Señales:");
+		lblSeniales.setEditable(false);
+		
+		
+		 GridBagConstraints gbc_lblSeniales = new GridBagConstraints();
+		gbc_lblSeniales.insets = new Insets(0, 0, 5, 0);
+		gbc_lblSeniales.gridx = 2;
+		gbc_lblSeniales.gridy = 4;
+		panelEstado.add(lblSeniales, gbc_lblSeniales);
+		
+		lblVictimarioIdentificado = new JLabel("Se identific\u00F3 al victimario:");
+		GridBagConstraints gbc_lblVictimarioIdentificado = new GridBagConstraints();
+		gbc_lblVictimarioIdentificado.insets = new Insets(0, 0, 5, 0);
+		gbc_lblVictimarioIdentificado.gridx = 2;
+		gbc_lblVictimarioIdentificado.gridy = 5;
+		panelEstado.add(lblVictimarioIdentificado, gbc_lblVictimarioIdentificado);
+		
+		lblPosicionVictimario = new JLabel("Posici\u00F3n del victimario:");
+		GridBagConstraints gbc_lblPosicionVictimario = new GridBagConstraints();
+		gbc_lblPosicionVictimario.gridx = 2;
+		gbc_lblPosicionVictimario.gridy = 6;
+		panelEstado.add(lblPosicionVictimario, gbc_lblPosicionVictimario);
 		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -195,7 +242,9 @@ public class UIVentanaPrincipal extends JFrame {
 
 				//creacion de la ventana grafica tomando los datos del grafo
 				ventanaGrafica = new UIVentanaGrafica(grafo);
-				ventanaGrafica.setAutoscrolls(true);
+			//ventanaGrafica = new UIVentanaGrafica(this.estadoMapa, this.estadoDrone);	
+			//ventanaGrafica = new UIVentanaGrafica(grafo, this.estadoDrone);
+			ventanaGrafica.setAutoscrolls(true);
 				panelGrafico.add(ventanaGrafica);
 				ventanaGrafica.setVisible(true);
 				ventanaGrafica.repaint();
@@ -270,8 +319,9 @@ public class UIVentanaPrincipal extends JFrame {
 						//creacion de la ventana grafica tomando los datos del grafo
 						panelGrafico.remove(ventanaGrafica);
 						
-				
 						ventanaGrafica = new UIVentanaGrafica(grafo);
+						//ventanaGrafica = new UIVentanaGrafica(grafo, estadoDrone);
+						System.out.println("CREA VENTANA GRAFICA");
 						ventanaGrafica.setAutoscrolls(true);
 						panelGrafico.add(ventanaGrafica);
 						ventanaGrafica.setVisible(true);
@@ -298,6 +348,10 @@ public class UIVentanaPrincipal extends JFrame {
 			}
 		}
 }
+	public void setEstadoDrone(StateDrone estadoDrone)
+	{
+		this.estadoDrone = estadoDrone;
+	}
 	public Grafo getGrafo() {
 		return grafo;
 	}
@@ -311,6 +365,63 @@ public class UIVentanaPrincipal extends JFrame {
 	{
 		return datosCargados;
 	}
+
+	@Override
+	public void runEventHandler(Object[] params) {
+		if(estadoDrone != null) {
+
+			int energia = estadoDrone.getEnergiaActual();
+			
+			this.lblEnergia.setText("Energía: " + String.valueOf(energia));
+			
+			this.lblPosicion.setText("Posición: " + String.valueOf(estadoDrone.getPosicionActual().x) + ", " + String.valueOf(estadoDrone.getPosicionActual().y));
+			
+			String str =  "Señales: ";
+		       for(int i = 0; i < estadoDrone.getSeñales().length; i++)
+		       {
+		    	   if(estadoDrone.getSeñales()[i][0] != 0) //si no tiene señal en esa posición
+		    	   {
+		    		   str = str + "Nodo " + (i+1) + ": Posición: "+ estadoDrone.getSeñales()[i][1] + ", " + estadoDrone.getSeñales()[i][2]+ ". Cantidad de personas: " + estadoDrone.getSeñales()[i][0];
+		    		   
+		    		   str = str + "\n";
+		    	   }
+		    	   
+		       }
+		       this.lblSeniales.setText(str);
+		       
+		       str = "";
+		       
+		       if(estadoDrone.getIdVictimario() == 0)
+		       {
+		     	  str = str + " Aún no se identificó al victimario";
+		       }
+		       else
+		       {
+		     	  
+		     	  str = str + " Se ha encontrado al victimario!!. ID del Victimario: "+ estadoDrone.getIdVictimario() + "";
+		
+		     	  
+		       }
+		       
+		       this.lblVictimarioIdentificado.setText(str);
+		       
+		       str = "";
+		       str= str + "Posición del victimario: " + estadoDrone.getPosicionVictimario().x + ", "+ estadoDrone.getPosicionVictimario().y;
+		     	
+		       this.lblPosicionVictimario.setText(str);
+		       
+		       str = "";
+		       
+		      
+			
+			//pl.inicializarPercepcion(estadoAmbiente,estadoRonly);
+			//ventanaGrafica.mapa = new UIMapa(grafo);
+			//ventanaGrafica.mapa.setEstadoAgente(estadoDrone);
+	    	
+    	}
+	}
+
+	
 }
 
 

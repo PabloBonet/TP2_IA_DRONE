@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.util.List;
 import frsf.cidisi.exercise.libreriaclases.*;
+import frsf.cidisi.exercise.situationCalculus.StateDrone;
 
 import javax.swing.ImageIcon;
 
@@ -15,6 +16,9 @@ public class UIMapa extends Canvas {
 	
 	private Image fondo;
 	private Grafo grafo;
+	private Image drone;
+	//private Point posicionDrone;
+	private StateDrone estadoDrone = null;
 	
 
 	/**
@@ -23,12 +27,15 @@ public class UIMapa extends Canvas {
 	 */
 	public UIMapa(Grafo grafo) {
 		this.grafo = grafo;
-		inicializarImagenFondo();
+		inicializarImagenes();
+		
 		
 	}
 
-	private void inicializarImagenFondo() {
+	private void inicializarImagenes() {
 		fondo = new ImageIcon("imagenes/entornoMapa.png").getImage();
+		
+		drone = new ImageIcon("imagenes/drone.png").getImage();
 	}
 	
 	@Override
@@ -37,10 +44,25 @@ public class UIMapa extends Canvas {
 	 */
 	public void paint(Graphics g) {
 		g.drawImage(fondo, 0, 0, getWidth(), getHeight(), this);
-		dibujarCuadrantes(g);
+		
+		//dibujarCuadrantes(g);
 		dibujarNodos(g,grafo);
-		dibujarArcosEntreNodos(g, grafo);
+		//dibujarArcosEntreNodos(g, grafo);
+		//g.drawImage(drone,0,0, this);
+		
+		if(estadoDrone != null)
+		{
+			
+			g.drawImage(drone,estadoDrone.getPosicionVictimario().x,estadoDrone.getPosicionVictimario().y, this);
+		}
 	}
+	
+	public void setEstadoAgente(StateDrone estadoDrone)
+	{
+		this.estadoDrone = estadoDrone;
+		this.repaint();
+	}
+	
 
 	/**
 	 * Metodo para graficar los nodos sobre el mapa
@@ -53,7 +75,8 @@ public class UIMapa extends Canvas {
 			//cuenta las personas en el nodo
 			
 			int cantPersonas = grafo.getListaNodos().get(i).getPersonas().size();
-			
+			if(estadoDrone != null)
+			System.out.println("Estado Drone: posicion: " + estadoDrone.getPosicionActual().x + " " + estadoDrone.getPosicionActual().y);
 			//coloca el color al nodo dependiendo si tiene victimarios
 			if(grafo.getListaNodos().size() > 0)
 			{
@@ -69,12 +92,34 @@ public class UIMapa extends Canvas {
 					}
 					else
 					{
-						g.setColor(Color.white);
+						g.setColor(Color.black);
 					}
 					
 				}
 			}
-			g.fillOval(grafo.getListaNodos().get(i).getPosX()-10,grafo.getListaNodos().get(i).getPosY()-10,18,18);
+			int desplazarX = 0;
+			int desplazarY = 0;
+			
+			if(i < 3)
+			{
+				desplazarY = 25;
+				desplazarX = 25;
+			}
+			else
+			{
+				if(i > 2 && i < 6)
+				{
+					desplazarY = 200;
+					desplazarX = 25;
+				}
+				else
+				{
+					desplazarY = 375;
+					desplazarX = 25;
+				}
+			}
+			
+			g.fillOval(grafo.getListaNodos().get(i).getPosX()*3 +desplazarX,grafo.getListaNodos().get(i).getPosY() + desplazarY ,18,18);
 			//String esquina = Integer.toString(grafo.getListaNodos().get(i).getId());
 			g.setColor(Color.black);
 			//g.drawString(esquina, grafo.getListaNodos().get(i).getPosX(),grafo.getListaNodos().get(i).getPosY());
@@ -93,60 +138,7 @@ public class UIMapa extends Canvas {
 	return false;
 	}
 	
-	/**
-	 * Metodo para graficar los enlaces entre nodos
-	 * @param g
-	 * @param grafo
-	 */
-	private void dibujarArcosEntreNodos(Graphics g, Grafo grafo){
-		int idNodo1;
-		int idNodo2;
-		String costo;
-		Nodo nodo1;
-		Nodo nodo2;
-		for(int i=0; i<grafo.getListaEnlaces().size(); i++){
-			//variables auxiliares para guardar el id de cada nodo que compone el enlace
-			idNodo1 = grafo.getListaEnlaces().get(i).getIdNodo1();
-			idNodo2 = grafo.getListaEnlaces().get(i).getIdNodo2();
-			nodo1 = grafo.buscarNodo(idNodo1);
-			nodo2 = grafo.buscarNodo(idNodo2);
-			
-			//g.setColor(Color.MAGENTA);
-			//g.drawLine(nodo1.getPosX(),nodo1.getPosY(),nodo2.getPosX(),nodo2.getPosY());
-			
-//			costo = Integer.toString(grafo.getListaEnlace().get(i).getPeso());
-//			g.drawString(costo, grafo.getListaNodos().get(i).getPosX(),grafo.getListaNodos().get(i).getPosY());
-		}
-	}
-	
-	/**
-	 * Trazado de Cuadrantes
-	 * @param g
-	 */
-	private void dibujarCuadrantes(Graphics g) {
-		
-		 //Vista Nivel Superior
-		 g.setColor(Color.RED);
-		 //cuadrante1
-		 g.drawRect(0, 0, 300, 300);
-		 g.drawOval(146, 135, 20, 20);
-		 g.drawString("A1", 150, 150);
-		 
-		 //cuadrante2
-		 g.drawRect(300, 0, 300, 300);
-		 g.drawOval(446, 135, 20, 20);
-		 g.drawString("A2", 450, 150);
-		 
-		 //cuadrante3
-		 g.drawRect(0, 300, 300, 300);
-		 g.drawOval(146, 435, 20, 20);
-		 g.drawString("A3", 150, 450);
-		
-		 //cuadrante4
-		 g.drawRect(300, 300, 300, 300);
-		 g.drawOval(446, 435, 20, 20);
-		 g.drawString("A4", 450, 450);
-	}
+
 	
 
 

@@ -114,7 +114,7 @@ Point posicionActual = this.getPosicionActual();
     /**
      * Función que realiza la consulta a la base de conocimiento y devuelve la posición actual del agente
      * */
-    private Point getPosicionActual()
+    public Point getPosicionActual()
     {
     	String consultaPosicion = "agenteEnPosicion(X,Y," + this.getSituation() + ")";
     	
@@ -130,7 +130,7 @@ Point posicionActual = this.getPosicionActual();
      * Función que realiza la consulta a la base de conocimiento y devuelve la energía actual del agente
      * */
     
-    private int getEnergiaActual()
+    public int getEnergiaActual()
     {
     	String consultaEnergia = "energia(E," + this.getSituation() + ")";
     	
@@ -144,7 +144,7 @@ Point posicionActual = this.getPosicionActual();
     /**
      * Función que realiza la consulta a la base de conocimiento y devuelve la lista de señales del agente
      * */
-    private int[][] getSeñales()
+    public int[][] getSeñales()
     {
     	int [][] señales = new int[9][3];
     	
@@ -170,7 +170,7 @@ Point posicionActual = this.getPosicionActual();
      * Función que consulta la base de conocimiento para saber la posición el victimario
      * si todavía no la conoce, retorna como posición (-1,-1).
      * */
-    private Point getPosicionVictimario()
+    public Point getPosicionVictimario()
     {	
     	Point posicion;
     	
@@ -193,7 +193,7 @@ Point posicionActual = this.getPosicionActual();
      * Función que retorna el ID del victimario si lo identifica
      * Si todavía no conoce el ID retorna un Id = 0
      * */
-    private int getIdVictimario()
+    public int getIdVictimario()
     {
     	int id = 0;
     	

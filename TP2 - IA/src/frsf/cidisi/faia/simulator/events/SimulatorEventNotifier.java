@@ -27,7 +27,7 @@ public class SimulatorEventNotifier {
 
     public static void runEventHandlers(EventType eventType, Object[] params) {
 
-        if (!eventHandlers.contains(eventType)) {
+        if (!eventHandlers.containsKey(eventType)) {
             return;
         }
 
@@ -37,7 +37,7 @@ public class SimulatorEventNotifier {
     }
 
     public static void SubscribeEventHandler(EventType eventType, EventHandler eventHandler) {
-        if (!eventHandlers.contains(eventType)) {
+        if (!eventHandlers.containsKey(eventType)) {
             eventHandlers.put(eventType, new Vector<EventHandler>());
         }
 

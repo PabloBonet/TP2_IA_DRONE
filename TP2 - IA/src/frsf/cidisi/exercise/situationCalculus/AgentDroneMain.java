@@ -34,9 +34,10 @@ public class AgentDroneMain {
     	/*
     	 *** COLOCA LA POSICIÓN INICIAL****
     	 * Coloque el número de nodo inicial en la funcion nodoInicial(nodo)
+    	 * Rango: 1 a 9
     	 * */
     	
-    	Point posicionInicial = nodoInicial(7);
+    	Point posicionInicial = nodoInicial(1);
     	
     	
     	

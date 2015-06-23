@@ -47,13 +47,13 @@ public class IrSur extends SituationCalculusAction {
     	int energia = estadoAmbiente.getenergiaDrone();
         if(hayPersonas)
         {
-        	System.out.println("Hay Personas");
+        	
             estadoAmbiente.setenergiaDrone(energia-1);
             	
         }
         else
         {
-        	System.out.println("NO Hay Personas");
+        	
             estadoAmbiente.setenergiaDrone(energia-2);
         } 
       //Marca el nodo actual como visitado
